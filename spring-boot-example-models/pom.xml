@@ -19,5 +19,12 @@
     </properties>
 
     <dependencies>
+
+
+        <!-- Commons -->
+        <dependency>
+            <groupId>commons-validator</groupId>
+            <artifactId>commons-validator</artifactId>
+        </dependency>
     </dependencies>
 </project>
