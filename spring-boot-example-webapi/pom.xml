@@ -19,5 +19,18 @@
     </properties>
 
     <dependencies>
+        <!-- Project modules -->
+        <dependency>
+            <groupId>com.bellotapps.examples</groupId>
+            <artifactId>spring-boot-example-interfaces</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.bellotapps.examples</groupId>
+            <artifactId>spring-boot-example-services</artifactId>
+            <version>${project.parent.version}</version>
+            <scope>runtime</scope>
+        </dependency>
+
     </dependencies>
 </project>
