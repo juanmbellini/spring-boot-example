@@ -15,7 +15,11 @@
     <name>spring-boot-example-webapi</name>
 
     <properties>
+        <!-- Encoding -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <!-- Bootstrap class -->
+        <bootstrapClass>com.bellotapps.examples.spring_boot_example.webapi.config.App</bootstrapClass>
     </properties>
 
     <dependencies>
@@ -32,5 +36,24 @@
             <scope>runtime</scope>
         </dependency>
 
+        <!-- External Libraries -->
+        <!-- Spring boot starter -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
+        </dependency>
+
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <mainClass>${bootstrapClass}</mainClass>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>

@@ -11,25 +11,47 @@
     <packaging>pom</packaging>
     <name>${project.groupId}:${project.artifactId}</name>
 
+    <properties>
+        <!-- Encoding -->
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <!-- Sub modules names -->
+        <models-module>spring-boot-example-models</models-module>
+        <interfaces-module>spring-boot-example-interfaces</interfaces-module>
+        <persistence-module>spring-boot-example-persistence</persistence-module>
+        <services-module>spring-boot-example-services</services-module>
+        <webapi-module>spring-boot-example-webapi</webapi-module>
+
+        <!-- Versions -->
+        <maven-compiler-plugin.version>3.5.1</maven-compiler-plugin.version>
+        <org.springframework.boot.version>1.5.6.RELEASE</org.springframework.boot.version>
+        <commons-validator.version>1.6</commons-validator.version>
+        <junit.version>RELEASE</junit.version>
+
+    </properties>
+
+
     <modules>
-        <module>spring-boot-example-models</module>
-        <module>spring-boot-example-interfaces</module>
-        <module>spring-boot-example-persistence</module>
-        <module>spring-boot-example-services</module>
-        <module>spring-boot-example-webapi</module>
+        <module>${models-module}</module>
+        <module>${interfaces-module}</module>
+        <module>${persistence-module}</module>
+        <module>${services-module}</module>
+        <module>${webapi-module}</module>
     </modules>
 
-    <properties>
-        <!-- Build -->
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven-compiler-plugin.version>3.5.1</maven-compiler-plugin.version>
-
-        <!-- Dependencies -->
-        <commons-validator.version>1.6</commons-validator.version>
-    </properties>
 
     <dependencyManagement>
         <dependencies>
+
+            <!-- Spring boot dependencies -->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>${org.springframework.boot.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
 
             <!-- Apache Commons Validator -->
             <dependency>
@@ -60,6 +82,20 @@
                         <source>1.8</source>
                         <target>1.8</target>
                     </configuration>
+                </plugin>
+
+                <!-- Spring Boot Plugin -->
+                <plugin>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-maven-plugin</artifactId>
+                    <version>${org.springframework.boot.version}</version>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>repackage</goal>
+                            </goals>
+                        </execution>
+                    </executions>
                 </plugin>
             </plugins>
         </pluginManagement>
