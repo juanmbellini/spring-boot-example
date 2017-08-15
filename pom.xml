@@ -12,18 +12,27 @@
     <name>${project.groupId}:${project.artifactId}</name>
 
     <properties>
-        <!-- Encoding -->
+        <!-- ********************** -->
+        <!--        Encoding        -->
+        <!-- ********************** -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <!-- Sub modules names -->
+        <!-- ********************** -->
+        <!--    Sub modules names   -->
+        <!-- ********************** -->
         <models-module>spring-boot-example-models</models-module>
         <interfaces-module>spring-boot-example-interfaces</interfaces-module>
         <persistence-module>spring-boot-example-persistence</persistence-module>
         <services-module>spring-boot-example-services</services-module>
         <webapi-module>spring-boot-example-webapi</webapi-module>
 
-        <!-- Versions -->
+        <!-- ********************** -->
+        <!--        Versions        -->
+        <!-- ********************** -->
+        <!-- Plugins -->
         <maven-compiler-plugin.version>3.5.1</maven-compiler-plugin.version>
+
+        <!-- Dependencies -->
         <org.springframework.boot.version>1.5.6.RELEASE</org.springframework.boot.version>
         <commons-validator.version>1.6</commons-validator.version>
         <junit.version>RELEASE</junit.version>
@@ -44,6 +53,7 @@
         <dependencies>
 
             <!-- Spring boot dependencies -->
+            <!-- Spring Boot dependency management import -->
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-dependencies</artifactId>
