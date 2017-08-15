@@ -1,0 +1,3 @@
+
+logging:
+  path: /tmp/log/com/bellotapps/examples/spring-boot-example
