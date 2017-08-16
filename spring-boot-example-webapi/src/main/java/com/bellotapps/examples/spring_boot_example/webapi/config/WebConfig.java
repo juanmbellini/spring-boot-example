@@ -12,7 +12,9 @@ import org.springframework.context.annotation.Configuration;
  * Class that provides Spring Beans for app configuration.
  */
 @Configuration
-@ComponentScan({"com.bellotapps.examples.spring_boot_example.webapi.controller",})
+@ComponentScan({"com.bellotapps.examples.spring_boot_example.webapi.controller",
+        "com.bellotapps.examples.spring_boot_example.services",
+})
 public class WebConfig {
 
 
