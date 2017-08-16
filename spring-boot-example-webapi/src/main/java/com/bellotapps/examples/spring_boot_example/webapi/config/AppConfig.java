@@ -15,7 +15,7 @@ import org.springframework.context.annotation.Configuration;
 @ComponentScan({"com.bellotapps.examples.spring_boot_example.webapi.controller",
         "com.bellotapps.examples.spring_boot_example.services",
 })
-public class WebConfig {
+public class AppConfig {
 
 
     /**

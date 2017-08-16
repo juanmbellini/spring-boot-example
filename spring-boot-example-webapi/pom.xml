@@ -19,7 +19,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <!-- Bootstrap class -->
-        <bootstrapClass>com.bellotapps.examples.spring_boot_example.webapi.config.App</bootstrapClass>
+        <bootstrapClass>com.bellotapps.examples.spring_boot_example.webapi.config.Bootstrap</bootstrapClass>
     </properties>
 
     <dependencies>
