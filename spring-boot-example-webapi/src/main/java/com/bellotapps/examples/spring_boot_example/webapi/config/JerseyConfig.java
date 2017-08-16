@@ -5,6 +5,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider;
 import org.glassfish.jersey.server.ResourceConfig;
+import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
+import org.springframework.core.type.filter.AnnotationTypeFilter;
+import org.springframework.stereotype.Component;
+import org.springframework.util.ClassUtils;
+
+import javax.ws.rs.ext.Provider;
+import java.util.Arrays;
+import java.util.Collection;
 
 /**
  * Main Jersey configuration.
@@ -17,7 +25,12 @@ public class JerseyConfig extends ResourceConfig {
      * Used to configure Jersey.
      */
     public JerseyConfig() {
-        packages("com.bellotapps.examples.spring_boot_example.webapi.controller");
+
+        // Register packages containing providers
+        registerPackages("com.bellotapps.examples.spring_boot_example.webapi.controller",
+                "com.bellotapps.examples.spring_boot_example.webapi.exception_mappers");
+
+        // Register Jackson as a JSON Provider
         register(jacksonJaxbJsonProvider());
     }
 
@@ -39,4 +52,23 @@ public class JerseyConfig extends ResourceConfig {
 
         return new JacksonJaxbJsonProvider(om, JacksonJaxbJsonProvider.DEFAULT_ANNOTATIONS);
     }
+
+    /**
+     * Register packages containing providers in this {@link ResourceConfig}.
+     *
+     * @param packages The packages containing providers.
+     */
+    private void registerPackages(String... packages) {
+        // Register packages of in app Providers
+        final ClassPathScanningCandidateComponentProvider scanner = new ClassPathScanningCandidateComponentProvider(false);
+        scanner.addIncludeFilter(new AnnotationTypeFilter(Provider.class));
+        scanner.addIncludeFilter(new AnnotationTypeFilter(Component.class));
+
+        Arrays.stream(packages)
+                .map(scanner::findCandidateComponents).flatMap(Collection::stream)
+                .map(beanDefinition ->
+                        ClassUtils.resolveClassName(beanDefinition.getBeanClassName(), this.getClassLoader()))
+                .forEach(this::register);
+    }
+
 }
