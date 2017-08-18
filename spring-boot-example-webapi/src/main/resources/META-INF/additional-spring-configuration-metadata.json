@@ -1,0 +1,9 @@
+{
+  "properties": [
+    {
+      "name": "custom.rolling-policy.max-history",
+      "type": "java.lang.Integer",
+      "description": "Description for custom.rolling-policy.max-history."
+    }
+  ]
+}
