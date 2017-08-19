@@ -3,6 +3,12 @@ spring:
     profiles:
         active: dev
 
+    # Mock datasource for booting purposes
+    # Change as needed
+    datasource:
+        url: jdbc:postgresql://localhost:5432/spring-boot-example
+        username: spring-boot
+        password: spring-boot
 
 logging:
     path: /tmp/logs/com.bellotapps.examples/spring-boot-example
@@ -39,5 +45,6 @@ spring:
     profiles:
         - prod
         - production
+
 logging:
     config: classpath:logging/logback-spring-prod.xml

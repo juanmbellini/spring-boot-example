@@ -34,6 +34,7 @@
 
         <!-- Dependencies -->
         <org.springframework.boot.version>1.5.6.RELEASE</org.springframework.boot.version>
+        <org.flywaydb.version>4.2.0</org.flywaydb.version>
         <commons-validator.version>1.6</commons-validator.version>
         <junit.version>RELEASE</junit.version>
 
@@ -62,6 +63,13 @@
                 <scope>import</scope>
             </dependency>
 
+
+            <!-- Flyway stuff -->
+            <dependency>
+                <groupId>org.flywaydb</groupId>
+                <artifactId>flyway-core</artifactId>
+                <version>${org.flywaydb.version}</version>
+            </dependency>
 
             <!-- Apache Commons Validator -->
             <dependency>
