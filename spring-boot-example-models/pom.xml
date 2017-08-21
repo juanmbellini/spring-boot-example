@@ -20,6 +20,12 @@
 
     <dependencies>
 
+        <!-- External Libraries -->
+        <!-- Hibernate Core in order to get JPA annotations (and some vendor specific features) -->
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-core</artifactId>
+        </dependency>
 
         <!-- Commons -->
         <dependency>

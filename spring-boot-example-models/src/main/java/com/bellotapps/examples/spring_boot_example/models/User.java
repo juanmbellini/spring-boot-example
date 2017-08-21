@@ -2,6 +2,7 @@ package com.bellotapps.examples.spring_boot_example.models;
 
 import com.bellotapps.examples.spring_boot_example.models.validation.*;
 
+import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
@@ -9,6 +10,12 @@ import java.util.List;
 /**
  * Class representing a user of the application.
  */
+@Entity
+@Table(name = "users", indexes = {
+        @Index(name = "users_username_unique_index", columnList = "username", unique = true),
+        @Index(name = "users_email_unique_index", columnList = "email", unique = true),
+
+})
 public class User implements ValidationExceptionThrower {
 
     /**
@@ -20,47 +27,56 @@ public class User implements ValidationExceptionThrower {
     /**
      * The user's id.
      */
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private long id;
 
     /**
      * The user's full name.
      */
+    @Column(name = "full_name")
     private String fullName;
 
     /**
      * The user's birth date.
      */
+    @Column(name = "birth_date")
     private LocalDate birthDate;
 
     /**
      * The username.
      */
+    @Column(name = "username")
     private String username;
 
     /**
      * The user's email.
      */
+    @Column(name = "email")
     private String email;
 
     /**
      * The user's password.
      */
-    private String password;
+    @Column(name = "hashed_password")
+    private String hashedPassword;
 
 
     /**
      * Constructor.
      *
-     * @param fullName  The user's full name.
-     * @param birthDate The user's birth date.
-     * @param username  The username.
-     * @param email     The user's email.
-     * @param password  The user's password.
+     * @param fullName       The user's full name.
+     * @param birthDate      The user's birth date.
+     * @param username       The username.
+     * @param email          The user's email.
+     * @param hashedPassword The user's password (must be hashed).
      * @throws ValidationException In case any value is not a valid one.
      */
-    public User(String fullName, LocalDate birthDate, String username, String email, String password)
+    public User(String fullName, LocalDate birthDate, String username, String email, String hashedPassword)
             throws ValidationException {
-        this.update(fullName, birthDate, username, email, password);
+        update(fullName, birthDate, username, email);
+        changePassword(hashedPassword);
     }
 
     /**
@@ -70,17 +86,15 @@ public class User implements ValidationExceptionThrower {
      * @param birthDate The new birth date for the user.
      * @param username  The new username for the user.
      * @param email     The new email for the user.
-     * @param password  The new password for the user.
      * @throws ValidationException In case any value is not a valid one.
      */
-    private void update(String fullName, LocalDate birthDate, String username, String email, String password)
+    public void update(String fullName, LocalDate birthDate, String username, String email)
             throws ValidationException {
-        validate(fullName, birthDate, username, email, password);
+        validate(fullName, birthDate, username, email);
         this.fullName = fullName;
         this.birthDate = birthDate;
         this.username = username;
         this.email = email;
-        this.password = password;
     }
 
 
@@ -119,15 +133,20 @@ public class User implements ValidationExceptionThrower {
         return email;
     }
 
+    /**
+     * @return The user's password.
+     */
+    public String getHashedPassword() {
+        return hashedPassword;
+    }
 
     /**
-     * Checks whether this {@link User}'s password matches the given {@code otherPassword}
+     * Changes this user's password.
      *
-     * @param otherPassword The other password to match with this {@link User}'s password.
-     * @return {@code true} if the passwords match, or {@code false} otherwise.
+     * @param hashedPassword The new password for the user (must be hashed).
      */
-    public boolean matchPassword(String otherPassword) {
-        return this.password.equals(otherPassword); // TODO: change to use hashing.
+    public void changePassword(String hashedPassword) {
+        this.hashedPassword = hashedPassword;
     }
 
 
@@ -142,10 +161,9 @@ public class User implements ValidationExceptionThrower {
      * @param birthDate The birth date to be validated.
      * @param username  The user name to be validated.
      * @param email     The email to be validated.
-     * @param password  The password to be validated.
      * @throws ValidationException In case any value is not a valid one.
      */
-    private void validate(String fullName, LocalDate birthDate, String username, String email, String password)
+    private void validate(String fullName, LocalDate birthDate, String username, String email)
             throws ValidationException {
         final List<ValidationError> errorList = new LinkedList<>();
         // Validate full name
@@ -173,12 +191,8 @@ public class User implements ValidationExceptionThrower {
                 ValidationConstants.EMAIL_MAX_LENGTH, errorList, ValidationErrorConstants.MISSING_E_MAIL,
                 ValidationErrorConstants.E_MAIL_TOO_SHORT, ValidationErrorConstants.E_MAIL_TOO_LONG,
                 ValidationErrorConstants.INVALID_E_MAIL);
-        // Validate password
-        ValidationHelper.stringNotNullAndLengthBetweenTwoValues(password, ValidationConstants.PASSWORD_MIN_LENGTH,
-                ValidationConstants.PASSWORD_MAX_LENGTH, errorList, ValidationErrorConstants.MISSING_PASSWORD,
-                ValidationErrorConstants.PASSWORD_TOO_SHORT, ValidationErrorConstants.PASSWORD_TOO_LONG);
-        // TODO: validate password contains certain characters (or matches a given regex)
 
+        // Password must be validated in security layer.
 
         throwValidationException(errorList); // throws ValidationException if error list is not empty.
     }
