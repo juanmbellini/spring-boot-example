@@ -1,7 +1,12 @@
 # Default Configuration
+
 spring:
     profiles:
         active: dev
+
+    jpa:
+        hibernate:
+            ddl-auto: none
 
     # Mock datasource for booting purposes
     # Change as needed
@@ -25,6 +30,12 @@ spring:
         - dev
         - development
 
+    jpa:
+        properties:
+            hibernate:
+                show_sql: true
+                format_sql: true
+
 logging:
     config: classpath:logging/logback-spring-dev.xml
 
@@ -34,6 +45,12 @@ logging:
 spring:
     profiles:
         - staging
+
+    jpa:
+        properties:
+            hibernate:
+                show_sql: true
+                format_sql: false
 
 logging:
     config: classpath:logging/logback-spring-staging.xml
@@ -45,6 +62,11 @@ spring:
     profiles:
         - prod
         - production
+    jpa:
+        properties:
+            hibernate:
+                show_sql: false
+                format_sql: false
 
 logging:
     config: classpath:logging/logback-spring-prod.xml

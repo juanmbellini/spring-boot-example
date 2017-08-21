@@ -14,6 +14,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @ComponentScan({"com.bellotapps.examples.spring_boot_example.webapi.controller",
         "com.bellotapps.examples.spring_boot_example.services",
+        "com.bellotapps.examples.spring_boot_example.persistence",
 })
 public class AppConfig {
 

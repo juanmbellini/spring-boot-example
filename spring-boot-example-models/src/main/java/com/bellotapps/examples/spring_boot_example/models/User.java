@@ -63,6 +63,10 @@ public class User implements ValidationExceptionThrower {
     private String hashedPassword;
 
 
+    /* package */ User() {
+        // For Hibernate.
+    }
+
     /**
      * Constructor.
      *
