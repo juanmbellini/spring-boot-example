@@ -6,6 +6,8 @@ import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
+import java.util.function.BiConsumer;
 
 /**
  * Class representing a user of the application.
@@ -79,8 +81,13 @@ public class User implements ValidationExceptionThrower {
      */
     public User(String fullName, LocalDate birthDate, String username, String email, String hashedPassword)
             throws ValidationException {
-        update(fullName, birthDate, username, email);
+        final List<ValidationError> errorList = new LinkedList<>();
+        update(fullName, birthDate, errorList);
+        changeUsername(username, errorList);
+        changeEMail(email, errorList);
         changePassword(hashedPassword);
+
+        throwValidationException(errorList); // Throws ValidationException if values were not valid
     }
 
     /**
@@ -88,17 +95,13 @@ public class User implements ValidationExceptionThrower {
      *
      * @param fullName  The new full name for the user.
      * @param birthDate The new birth date for the user.
-     * @param username  The new username for the user.
-     * @param email     The new email for the user.
      * @throws ValidationException In case any value is not a valid one.
      */
-    public void update(String fullName, LocalDate birthDate, String username, String email)
+    public void update(String fullName, LocalDate birthDate)
             throws ValidationException {
-        validate(fullName, birthDate, username, email);
-        this.fullName = fullName;
-        this.birthDate = birthDate;
-        this.username = username;
-        this.email = email;
+        final List<ValidationError> errorList = new LinkedList<>();
+        update(fullName, birthDate, errorList);
+        throwValidationException(errorList); // Throws ValidationException if values were not valid
     }
 
 
@@ -145,6 +148,28 @@ public class User implements ValidationExceptionThrower {
     }
 
     /**
+     * Changes this user's username.
+     *
+     * @param username The new username.
+     */
+    public void changeUsername(String username) {
+        final List<ValidationError> errorList = new LinkedList<>();
+        changeEMail(username, errorList);
+        throwValidationException(errorList); // Throws ValidationException if the username was not valid
+    }
+
+    /**
+     * Changes this user's email.
+     *
+     * @param email The new email.
+     */
+    public void changeEmail(String email) {
+        final List<ValidationError> errorList = new LinkedList<>();
+        changeEMail(email, errorList);
+        throwValidationException(errorList); // Throws ValidationException if the email was not valid
+    }
+
+    /**
      * Changes this user's password.
      *
      * @param hashedPassword The new password for the user (must be hashed).
@@ -154,27 +179,147 @@ public class User implements ValidationExceptionThrower {
     }
 
 
-    // ==================================
-    // Validations
-    // ==================================
+    // ================================
+    // equals, hashcode and toString
+    // ================================
 
     /**
-     * Validates the user
+     * Equals based on the {@code id}.
+     *
+     * @param o The object to be compared with.
+     * @return {@code true} if they are the equals, or {@code false} otherwise.
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof User)) return false;
+
+        User user = (User) o;
+
+        return id == user.id;
+    }
+
+    /**
+     * @return This user's hashcode, based on the {@code id}.
+     */
+    @Override
+    public int hashCode() {
+        return (int) (id ^ (id >>> 32));
+    }
+
+    @Override
+    public String toString() {
+        return "User: [" +
+                "ID: " + id +
+                ", Full Name: " + fullName +
+                ", Birth Date: " + birthDate +
+                ", Username: " + username +
+                ", Email: " + email +
+                ']';
+    }
+
+    // ================================
+    // Private setters
+    // ================================
+
+    /**
+     * Updates this user.
+     *
+     * @param fullName  The new full name for the user.
+     * @param birthDate The new birth date for the user.
+     * @param errorList A {@link List} of {@link ValidationError} that might have occurred before executing the method.
+     */
+    private void update(String fullName, LocalDate birthDate, List<ValidationError> errorList) {
+        setIfNoErrors(this, fullName, errorList, User::validateFullName,
+                (user, newValue) -> user.fullName = newValue);
+        setIfNoErrors(this, birthDate, errorList, User::validateBirthDate,
+                (user, newValue) -> user.birthDate = newValue);
+    }
+
+    /**
+     * Changes this user's username.
+     *
+     * @param username  The new username.
+     * @param errorList A {@link List} of {@link ValidationError} that might have occurred before executing the method.
+     */
+    private void changeUsername(String username, List<ValidationError> errorList) {
+        setIfNoErrors(this, username, errorList, User::validateUsername,
+                (user, newValue) -> user.username = newValue);
+    }
+
+    /**
+     * Changes this user's email.
+     *
+     * @param email     The new email.
+     * @param errorList A {@link List} of {@link ValidationError} that might have occurred before executing the method.
+     */
+    private void changeEMail(String email, List<ValidationError> errorList) {
+        setIfNoErrors(this, email, errorList, User::validateEmail,
+                (user, newValue) -> user.email = newValue);
+    }
+
+
+    // ================================
+    // Helpers
+    // ================================
+
+    /**
+     * Changes the given {@code editedUser} according to the given {@code setterAction},
+     * only if the given {@code validator} did not add {@link ValidationError}s to the given {@code errorList}
+     * when validating the given {@code newValue}.
+     *
+     * @param editedUser   The {@link User} being edited.
+     * @param newValue     The new value to set (if no error occurred).
+     * @param errorList    A {@link List} containing {@link ValidationError}
+     *                     that might have occurred before executing the method.
+     *                     It will hold new {@link ValidationError} that can be detected when executing this method.
+     * @param validator    A {@link BiConsumer} that takes the given {@code newValue} and {@code errorList}
+     *                     in order to validate the former, adding new {@link ValidationError} to the {@link List}
+     *                     if errors are detected.
+     * @param setterAction A {@link BiConsumer} that takes the given {@link User}, and the given {@code newValue},
+     *                     and sets the latter in the former.
+     * @param <T>          The concrete type of the {@code newValue}.
+     */
+    private static <T> void setIfNoErrors(User editedUser, T newValue, List<ValidationError> errorList,
+                                          BiConsumer<T, List<ValidationError>> validator,
+                                          BiConsumer<User, T> setterAction) {
+        Objects.requireNonNull(errorList, "The error list must not be null!");
+
+        final int amountOfErrors = errorList.size();
+        validator.accept(newValue, errorList); // If not valid, the size of errorList will increase
+        if (errorList.size() <= amountOfErrors) {
+            setterAction.accept(editedUser, newValue);
+        }
+    }
+
+
+    // ================================
+    // Validations
+    // ================================
+
+    /**
+     * Validates the {@code fullName}.
+     * Will add {@link ValidationError}s to the given {@code errorList} if the {@code fullName} is not valid.
      *
      * @param fullName  The full name to be validated.
-     * @param birthDate The birth date to be validated.
-     * @param username  The user name to be validated.
-     * @param email     The email to be validated.
-     * @throws ValidationException In case any value is not a valid one.
+     * @param errorList A {@link List} of {@link ValidationError} that might have occurred before executing the method.
      */
-    private void validate(String fullName, LocalDate birthDate, String username, String email)
-            throws ValidationException {
-        final List<ValidationError> errorList = new LinkedList<>();
-        // Validate full name
+    private static void validateFullName(String fullName, List<ValidationError> errorList) {
+        Objects.requireNonNull(errorList, "The error list must not be null!");
         ValidationHelper.stringNotNullAndLengthBetweenTwoValues(fullName, ValidationConstants.NAME_MIN_LENGTH,
                 ValidationConstants.NAME_MAX_LENGTH, errorList, ValidationErrorConstants.MISSING_FULL_NAME,
                 ValidationErrorConstants.FULL_NAME_TOO_SHORT, ValidationErrorConstants.FULL_NAME_TOO_LONG);
-        // Validate birth date
+    }
+
+    /**
+     * Validates the {@code birthDate}.
+     * Will add {@link ValidationError}s to the given {@code errorList} if the {@code birthDate} is not valid.
+     *
+     * @param birthDate The birth date to be validated.
+     * @param errorList A {@link List} of {@link ValidationError} that might have occurred before executing the method.
+     */
+    private static void validateBirthDate(LocalDate birthDate, List<ValidationError> errorList) {
+        Objects.requireNonNull(errorList, "The error list must not be null!");
         if (birthDate == null) {
             errorList.add(ValidationErrorConstants.MISSING_BIRTH_DATE);
         } else {
@@ -186,18 +331,34 @@ public class User implements ValidationExceptionThrower {
                 errorList.add(ValidationErrorConstants.TOO_YOUNG_USER);
             }
         }
-        // Validate username
+    }
+
+    /**
+     * Validates the {@code username}.
+     * Will add {@link ValidationError}s to the given {@code errorList} if the {@code username} is not valid.
+     *
+     * @param username  The username to be validated.
+     * @param errorList A {@link List} of {@link ValidationError} that might have occurred before executing the method.
+     */
+    private static void validateUsername(String username, List<ValidationError> errorList) {
+        Objects.requireNonNull(errorList, "The error list must not be null!");
         ValidationHelper.stringNotNullAndLengthBetweenTwoValues(username, ValidationConstants.USERNAME_MIN_LENGTH,
                 ValidationConstants.USERNAME_MAX_LENGTH, errorList, ValidationErrorConstants.MISSING_USERNAME,
                 ValidationErrorConstants.USERNAME_TOO_SHORT, ValidationErrorConstants.USERNAME_TOO_LONG);
-        // Validate email
+    }
+
+    /**
+     * Validates the {@code email}.
+     * Will add {@link ValidationError}s to the given {@code errorList} if the {@code email} is not valid.
+     *
+     * @param email     The email to be validated.
+     * @param errorList A {@link List} of {@link ValidationError} that might have occurred before executing the method.
+     */
+    private static void validateEmail(String email, List<ValidationError> errorList) {
+        Objects.requireNonNull(errorList, "The error list must not be null!");
         ValidationHelper.checkEmailNotNullAndValid(email, ValidationConstants.EMAIL_MIN_LENGTH,
                 ValidationConstants.EMAIL_MAX_LENGTH, errorList, ValidationErrorConstants.MISSING_E_MAIL,
                 ValidationErrorConstants.E_MAIL_TOO_SHORT, ValidationErrorConstants.E_MAIL_TOO_LONG,
                 ValidationErrorConstants.INVALID_E_MAIL);
-
-        // Password must be validated in security layer.
-
-        throwValidationException(errorList); // throws ValidationException if error list is not empty.
     }
 }
