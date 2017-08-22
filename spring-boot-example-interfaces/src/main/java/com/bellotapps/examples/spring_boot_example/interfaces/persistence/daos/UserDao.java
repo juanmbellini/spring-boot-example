@@ -1,5 +1,6 @@
-package com.bellotapps.examples.spring_boot_example.interfaces.daos;
+package com.bellotapps.examples.spring_boot_example.interfaces.persistence.daos;
 
+import com.bellotapps.examples.spring_boot_example.interfaces.persistence.custom_repositories.ExtendedJpaRepository;
 import com.bellotapps.examples.spring_boot_example.models.User;
 
 import java.util.Optional;
@@ -7,7 +8,7 @@ import java.util.Optional;
 /**
  * Defines behaviour of the DAO in charge of managing {@link User}s data.
  */
-public interface UserDao extends FilterableJpaRepository<User, Long> {
+public interface UserDao extends ExtendedJpaRepository<User, Long> {
 
     /**
      * Retrieves the {@link User} with the given {@code username}.
@@ -26,5 +27,4 @@ public interface UserDao extends FilterableJpaRepository<User, Long> {
      * containing the {@link User} with the given {@code email} if it exists, or {@code null} otherwise.
      */
     Optional<User> findByEmail(String email);
-
 }
