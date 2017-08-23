@@ -27,4 +27,20 @@ public interface UserDao extends ExtendedJpaRepository<User, Long> {
      * containing the {@link User} with the given {@code email} if it exists, or {@code null} otherwise.
      */
     Optional<User> findByEmail(String email);
+
+    /**
+     * Checks if a {@link User} exists with the given {@code username}.
+     *
+     * @param username The username to check if a {@link User} exists with.
+     * @return {@code true} if a {@link User} exists with the given {@code username}, or {@code false} otherwise.
+     */
+    boolean existsByUsername(String username);
+
+    /**
+     * Checks if a {@link User} exists with the given {@code email}.
+     *
+     * @param email The email to check if a {@link User} exists with.
+     * @return {@code true} if a {@link User} exists with the given {@code email}, or {@code false} otherwise.
+     */
+    boolean existsByEmail(String email);
 }
