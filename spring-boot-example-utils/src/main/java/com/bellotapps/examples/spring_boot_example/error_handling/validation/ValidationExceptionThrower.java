@@ -3,6 +3,7 @@ package com.bellotapps.examples.spring_boot_example.error_handling.validation;
 import com.bellotapps.examples.spring_boot_example.exceptions.ValidationException;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * An interface implementing a default method used to throw a {@link ValidationException}.
@@ -17,9 +18,7 @@ public interface ValidationExceptionThrower {
      *                  that were detected while validating changes over an entity.
      */
     default void throwValidationException(List<ValidationError> errorList) {
-        if (errorList == null) {
-            throw new IllegalArgumentException("The error list must not be null");
-        }
+        Objects.requireNonNull(errorList, "The error list must not be null");
         if (!errorList.isEmpty()) {
             throw new ValidationException(errorList);
         }
