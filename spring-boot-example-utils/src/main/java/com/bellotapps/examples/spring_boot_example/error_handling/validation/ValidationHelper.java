@@ -260,27 +260,27 @@ public class ValidationHelper {
     }
 
     /**
-     * Checks that the given {@code eMail} is valid and between the given lengths.
+     * Checks that the given {@code email} is valid and between the given lengths.
      *
-     * @param eMail             The eMail to be checked
-     * @param minLength         The eMail's min. length.
-     * @param maxLength         The eMail's max. length.
+     * @param email             The email to be checked
+     * @param minLength         The email's min. length.
+     * @param maxLength         The email's max. length.
      * @param errorList         The list containing the errors, in which new possible errors will be added.
      * @param nullFieldError    The error to be added on null value.
      * @param tooShortError     The error to be added on below {@code min} number.
      * @param tooLongError      The error to be added on above {@code max} number.
-     * @param invalidEmailError The error to be added on invalid eMail.
+     * @param invalidEmailError The error to be added on invalid email.
      */
-    public static void checkEmailNotNullAndValid(String eMail, int minLength, int maxLength,
+    public static void checkEmailNotNullAndValid(String email, int minLength, int maxLength,
                                                  List<ValidationError> errorList,
                                                  ValidationError nullFieldError, ValidationError tooShortError,
                                                  ValidationError tooLongError, ValidationError invalidEmailError) {
 
         int listLength = errorList.size();
-        stringNotNullAndLengthBetweenTwoValues(eMail, minLength, maxLength, errorList,
+        stringNotNullAndLengthBetweenTwoValues(email, minLength, maxLength, errorList,
                 nullFieldError, tooShortError, tooLongError);
         // if listLength is equal to the size of the error list, the email's length is between min and max length.
-        if (listLength == errorList.size() && !EmailValidator.getInstance().isValid(eMail)) {
+        if (listLength == errorList.size() && !EmailValidator.getInstance().isValid(email)) {
             errorList.add(invalidEmailError);
         }
     }

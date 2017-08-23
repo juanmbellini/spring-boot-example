@@ -89,7 +89,7 @@ public class User implements ValidationExceptionThrower {
         final List<ValidationError> errorList = new LinkedList<>();
         update(fullName, birthDate, errorList);
         changeUsername(username, errorList);
-        changeEMail(email, errorList);
+        changeEmail(email, errorList);
         changePassword(hashedPassword);
 
         throwValidationException(errorList); // Throws ValidationException if values were not valid
@@ -159,7 +159,7 @@ public class User implements ValidationExceptionThrower {
      */
     public void changeUsername(String username) {
         final List<ValidationError> errorList = new LinkedList<>();
-        changeEMail(username, errorList);
+        changeEmail(username, errorList);
         throwValidationException(errorList); // Throws ValidationException if the username was not valid
     }
 
@@ -170,7 +170,7 @@ public class User implements ValidationExceptionThrower {
      */
     public void changeEmail(String email) {
         final List<ValidationError> errorList = new LinkedList<>();
-        changeEMail(email, errorList);
+        changeEmail(email, errorList);
         throwValidationException(errorList); // Throws ValidationException if the email was not valid
     }
 
@@ -258,7 +258,7 @@ public class User implements ValidationExceptionThrower {
      * @param email     The new email.
      * @param errorList A {@link List} of {@link ValidationError} that might have occurred before executing the method.
      */
-    private void changeEMail(String email, List<ValidationError> errorList) {
+    private void changeEmail(String email, List<ValidationError> errorList) {
         setIfNoErrors(this, email, errorList, User::validateEmail,
                 (user, newValue) -> user.email = newValue);
     }

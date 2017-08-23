@@ -21,7 +21,7 @@ public class UserSpecificationCreatorImpl implements UserSpecificationCreator {
 
     @Override
     public Specification<User> create(String fullName, LocalDate minBirthDate, LocalDate maxBirthDate,
-                                      String username, String eMail) {
+                                      String username, String email) {
         return (root, query, cb) -> {
             final List<Predicate> predicates = new LinkedList<>();
             // Filter full name
@@ -42,7 +42,7 @@ public class UserSpecificationCreatorImpl implements UserSpecificationCreator {
                             .toLikePredicate(cb, root, "username", str, MatchMode.ANYWHERE, false))
                     .ifPresent(predicates::add);
             // Filter email
-            Optional.ofNullable(eMail)
+            Optional.ofNullable(email)
                     .map(str -> PersistenceHelper
                             .toLikePredicate(cb, root, "email", str, MatchMode.ANYWHERE, false))
                     .ifPresent(predicates::add);
