@@ -20,6 +20,7 @@
         <!-- ********************** -->
         <!--    Sub modules names   -->
         <!-- ********************** -->
+        <utils-module>spring-boot-example-utils</utils-module>
         <models-module>spring-boot-example-models</models-module>
         <interfaces-module>spring-boot-example-interfaces</interfaces-module>
         <persistence-module>spring-boot-example-persistence</persistence-module>
@@ -42,6 +43,7 @@
 
 
     <modules>
+        <module>${utils-module}</module>
         <module>${models-module}</module>
         <module>${interfaces-module}</module>
         <module>${persistence-module}</module>

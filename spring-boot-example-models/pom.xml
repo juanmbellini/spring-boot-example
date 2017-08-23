@@ -19,6 +19,12 @@
     </properties>
 
     <dependencies>
+        <!-- Project modules -->
+        <dependency>
+            <groupId>com.bellotapps.examples</groupId>
+            <artifactId>spring-boot-example-utils</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
 
         <!-- External Libraries -->
         <!-- Hibernate Core in order to get JPA annotations (and some vendor specific features) -->

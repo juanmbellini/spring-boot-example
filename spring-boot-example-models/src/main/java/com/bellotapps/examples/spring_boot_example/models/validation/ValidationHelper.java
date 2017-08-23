@@ -1,5 +1,6 @@
 package com.bellotapps.examples.spring_boot_example.models.validation;
 
+import com.bellotapps.examples.spring_boot_example.utils.errors.ValidationError;
 import org.apache.commons.validator.routines.EmailValidator;
 
 import java.util.Arrays;
@@ -11,7 +12,6 @@ import java.util.stream.Collectors;
  * Class containing static helper methods used for validation.
  */
 public class ValidationHelper {
-
 
     /**
      * Checks that the given {@code object} is null.
@@ -38,7 +38,6 @@ public class ValidationHelper {
             errorList.add(nullFieldError);
         }
     }
-
 
     /**
      * Checks that the given {@code number} is not null, and that it is between {@code min} and {@code max}.
@@ -171,7 +170,6 @@ public class ValidationHelper {
         maxAmountOfNulls(0, errorList, anyNullError, values);
     }
 
-
     /**
      * Checks that the given array is not {@code null}
      * and that its length is between the given {@code minLength} and {@code maxLength}
@@ -196,7 +194,6 @@ public class ValidationHelper {
             intIsBetweenTwoValues(array.length, minLength, maxLength, errorList, tooShortError, tooLongError);
         }
     }
-
 
     /**
      * Checks that the given array is {@code null}
@@ -243,7 +240,6 @@ public class ValidationHelper {
         }
     }
 
-
     /**
      * Checks that the given array is {@code null}
      * or that its length is between the given {@code minLength} and {@code maxLength}
@@ -264,7 +260,6 @@ public class ValidationHelper {
         }
     }
 
-
     /**
      * Checks that the given {@code eMail} is valid and between the given lengths.
      *
@@ -275,20 +270,19 @@ public class ValidationHelper {
      * @param nullFieldError    The error to be added on null value.
      * @param tooShortError     The error to be added on below {@code min} number.
      * @param tooLongError      The error to be added on above {@code max} number.
-     * @param invalidEMailError The error to be added on invalid eMail.
+     * @param invalidEmailError The error to be added on invalid eMail.
      */
     public static void checkEmailNotNullAndValid(String eMail, int minLength, int maxLength,
                                                  List<ValidationError> errorList,
                                                  ValidationError nullFieldError, ValidationError tooShortError,
-                                                 ValidationError tooLongError, ValidationError invalidEMailError) {
+                                                 ValidationError tooLongError, ValidationError invalidEmailError) {
 
         int listLength = errorList.size();
         stringNotNullAndLengthBetweenTwoValues(eMail, minLength, maxLength, errorList,
                 nullFieldError, tooShortError, tooLongError);
         // if listLength is equal to the size of the error list, the email's length is between min and max length.
         if (listLength == errorList.size() && !EmailValidator.getInstance().isValid(eMail)) {
-            errorList.add(invalidEMailError);
+            errorList.add(invalidEmailError);
         }
     }
-
 }

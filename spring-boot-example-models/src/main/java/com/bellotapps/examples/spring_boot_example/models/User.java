@@ -1,6 +1,11 @@
 package com.bellotapps.examples.spring_boot_example.models;
 
-import com.bellotapps.examples.spring_boot_example.models.validation.*;
+import com.bellotapps.examples.spring_boot_example.models.validation.ValidationConstants;
+import com.bellotapps.examples.spring_boot_example.models.validation.ValidationErrorConstants;
+import com.bellotapps.examples.spring_boot_example.models.validation.ValidationExceptionThrower;
+import com.bellotapps.examples.spring_boot_example.models.validation.ValidationHelper;
+import com.bellotapps.examples.spring_boot_example.utils.errors.ValidationError;
+import com.bellotapps.examples.spring_boot_example.utils.exceptions.ValidationException;
 
 import javax.persistence.*;
 import java.time.LocalDate;

@@ -1,8 +1,9 @@
-package com.bellotapps.examples.spring_boot_example.models.validation;
+package com.bellotapps.examples.spring_boot_example.utils.errors;
 
 /**
- * Created by Juan Marcos Bellini on 12/8/17.
- * Questions at jbellini@bellotsapps.com
+ * Class representing an error that occurs when validating an entity.
+ * There are two types of validation errors: a mandatory value is missing, or a value is not a legal one
+ * (see {@link ErrorCause} for more information).
  */
 public class ValidationError {
 
