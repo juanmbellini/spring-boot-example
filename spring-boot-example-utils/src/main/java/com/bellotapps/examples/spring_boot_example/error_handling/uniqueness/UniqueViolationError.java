@@ -1,4 +1,4 @@
-package com.bellotapps.examples.spring_boot_example.utils.error_handling.uniqueness;
+package com.bellotapps.examples.spring_boot_example.error_handling.uniqueness;
 
 import java.util.Arrays;
 

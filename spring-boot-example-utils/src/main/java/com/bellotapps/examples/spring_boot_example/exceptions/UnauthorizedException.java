@@ -1,4 +1,4 @@
-package com.bellotapps.examples.spring_boot_example.utils.exceptions;
+package com.bellotapps.examples.spring_boot_example.exceptions;
 
 /**
  * {@link RuntimeException} thrown when trying to perform an action without authorization.

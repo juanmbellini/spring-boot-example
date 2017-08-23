@@ -1,4 +1,4 @@
-package com.bellotapps.examples.spring_boot_example.utils.error_handling.validation;
+package com.bellotapps.examples.spring_boot_example.error_handling.validation;
 
 import org.apache.commons.validator.routines.EmailValidator;
 

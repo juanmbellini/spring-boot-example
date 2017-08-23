@@ -1,4 +1,4 @@
-package com.bellotapps.examples.spring_boot_example.utils.error_handling.validation;
+package com.bellotapps.examples.spring_boot_example.error_handling.validation;
 
 /**
  * Class representing an error that occurs when validating an entity.
