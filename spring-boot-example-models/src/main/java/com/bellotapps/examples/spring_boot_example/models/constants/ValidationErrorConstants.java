@@ -1,10 +1,10 @@
-package com.bellotapps.examples.spring_boot_example.models.validation;
+package com.bellotapps.examples.spring_boot_example.models.constants;
 
 
-import com.bellotapps.examples.spring_boot_example.utils.errors.ValidationError;
+import com.bellotapps.examples.spring_boot_example.utils.error_handling.validation.ValidationError;
 
-import static com.bellotapps.examples.spring_boot_example.utils.errors.ValidationError.ErrorCause.ILLEGAL_VALUE;
-import static com.bellotapps.examples.spring_boot_example.utils.errors.ValidationError.ErrorCause.MISSING_VALUE;
+import static com.bellotapps.examples.spring_boot_example.utils.error_handling.validation.ValidationError.ErrorCause.ILLEGAL_VALUE;
+import static com.bellotapps.examples.spring_boot_example.utils.error_handling.validation.ValidationError.ErrorCause.MISSING_VALUE;
 
 /**
  * Class containing {@link ValidationError} constants to be reused.

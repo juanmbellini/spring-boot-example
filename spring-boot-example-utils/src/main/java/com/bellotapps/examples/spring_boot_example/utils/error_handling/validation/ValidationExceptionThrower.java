@@ -1,6 +1,5 @@
-package com.bellotapps.examples.spring_boot_example.models.validation;
+package com.bellotapps.examples.spring_boot_example.utils.error_handling.validation;
 
-import com.bellotapps.examples.spring_boot_example.utils.errors.ValidationError;
 import com.bellotapps.examples.spring_boot_example.utils.exceptions.ValidationException;
 
 import java.util.List;

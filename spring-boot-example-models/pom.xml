@@ -33,11 +33,6 @@
             <artifactId>hibernate-core</artifactId>
         </dependency>
 
-        <!-- Commons -->
-        <dependency>
-            <groupId>commons-validator</groupId>
-            <artifactId>commons-validator</artifactId>
-        </dependency>
         <!-- JUnit -->
         <dependency>
             <groupId>junit</groupId>

@@ -1,4 +1,4 @@
-package com.bellotapps.examples.spring_boot_example.models.validation;
+package com.bellotapps.examples.spring_boot_example.models.constants;
 
 import java.time.LocalDate;
 

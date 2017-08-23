@@ -1,7 +1,6 @@
 package com.bellotapps.examples.spring_boot_example.utils.exceptions;
 
-import com.bellotapps.examples.spring_boot_example.utils.errors.UniqueViolationError;
-import com.bellotapps.examples.spring_boot_example.utils.errors.ValidationError;
+import com.bellotapps.examples.spring_boot_example.utils.error_handling.uniqueness.UniqueViolationError;
 
 import java.util.List;
 
@@ -18,7 +17,7 @@ public class UniqueViolationException extends RuntimeException {
     /**
      * Default constructor.
      *
-     * @param errorList A {@link List} containing all {@link ValidationError}s that caused the exception to be thrown.
+     * @param errorList A {@link List} containing all {@link UniqueViolationError}s that caused the exception to be thrown.
      */
     public UniqueViolationException(List<UniqueViolationError> errorList) {
         super();
@@ -29,7 +28,7 @@ public class UniqueViolationException extends RuntimeException {
      * Constructor which can set a {@code message}.
      *
      * @param message   The detail message, which is saved for later retrieval by the {@link #getMessage()} method.
-     * @param errorList A {@link List} containing all {@link ValidationError}s that caused the exception to be thrown.
+     * @param errorList A {@link List} containing all {@link UniqueViolationError}s that caused the exception to be thrown.
      */
     public UniqueViolationException(String message, List<UniqueViolationError> errorList) {
         super(message);
@@ -42,7 +41,7 @@ public class UniqueViolationException extends RuntimeException {
      * @param message   The detail message, which is saved for later retrieval by the {@link #getMessage()} method.
      * @param cause     The cause (which is saved for later retrieval by the {@link #getCause()} method).
      *                  For more information, see {@link RuntimeException#RuntimeException(Throwable)}.
-     * @param errorList A {@link List} containing all {@link ValidationError}s that caused the exception to be thrown.
+     * @param errorList A {@link List} containing all {@link UniqueViolationError}s that caused the exception to be thrown.
      */
     public UniqueViolationException(String message, Throwable cause, List<UniqueViolationError> errorList) {
         super(message, cause);
@@ -50,7 +49,7 @@ public class UniqueViolationException extends RuntimeException {
     }
 
     /**
-     * @return The {@link List} of {@link ValidationError}s that caused this exception to be thrown.
+     * @return The {@link List} of {@link UniqueViolationError}s that caused this exception to be thrown.
      */
     public List<UniqueViolationError> getErrors() {
         return errorList;

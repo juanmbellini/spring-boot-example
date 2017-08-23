@@ -1,10 +1,10 @@
 package com.bellotapps.examples.spring_boot_example.models;
 
-import com.bellotapps.examples.spring_boot_example.models.validation.ValidationConstants;
-import com.bellotapps.examples.spring_boot_example.models.validation.ValidationErrorConstants;
-import com.bellotapps.examples.spring_boot_example.models.validation.ValidationExceptionThrower;
-import com.bellotapps.examples.spring_boot_example.models.validation.ValidationHelper;
-import com.bellotapps.examples.spring_boot_example.utils.errors.ValidationError;
+import com.bellotapps.examples.spring_boot_example.models.constants.ValidationConstants;
+import com.bellotapps.examples.spring_boot_example.models.constants.ValidationErrorConstants;
+import com.bellotapps.examples.spring_boot_example.utils.error_handling.validation.ValidationExceptionThrower;
+import com.bellotapps.examples.spring_boot_example.utils.error_handling.validation.ValidationHelper;
+import com.bellotapps.examples.spring_boot_example.utils.error_handling.validation.ValidationError;
 import com.bellotapps.examples.spring_boot_example.utils.exceptions.ValidationException;
 
 import javax.persistence.*;
