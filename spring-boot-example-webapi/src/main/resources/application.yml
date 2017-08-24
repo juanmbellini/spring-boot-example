@@ -26,6 +26,10 @@ custom:
     rolling-policy:
         max-history: 5
 
+security:
+    sessions: stateless
+
+
 ---
 # Configuration for Development Environment
 
