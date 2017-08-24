@@ -3,6 +3,10 @@
 spring:
     profiles:
         active: dev
+    jersey:
+        application-path: /
+        servlet:
+            load-on-startup: 1
 
     jpa:
         hibernate:
