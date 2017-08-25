@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider;
 import org.glassfish.jersey.server.ResourceConfig;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
 import org.springframework.context.annotation.ComponentScan;
@@ -31,33 +30,19 @@ public class AppConfig {
     /**
      * Creates a {@link ResourceConfig} in order to configure Jersey's behaviour.
      *
-     * @param jacksonJaxbJsonProvider The {@link Provider} used to serialize/deserialize JSON from and into POJOs.
      * @return The {@link ResourceConfig} used to configure Jersey's behaviour.
      */
     @Bean
-    @Autowired
-    public ResourceConfig jerseyConfig(JacksonJaxbJsonProvider jacksonJaxbJsonProvider) {
+    public ResourceConfig jerseyConfig() {
         final ResourceConfig jerseyConfig = new ResourceConfig();
         registerPackages(jerseyConfig,
                 "com.bellotapps.examples.spring_boot_example.webapi.controller",
-                "com.bellotapps.examples.spring_boot_example.webapi.exception_mappers");
-        jerseyConfig.register(jacksonJaxbJsonProvider);
+                "com.bellotapps.examples.spring_boot_example.webapi.exception_mappers",
+                "com.bellotapps.examples.spring_boot_example.webapi.support.value_factory_providers");
+        jerseyConfig.register(new JacksonJaxbJsonProvider(jacksonObjectMapper(),
+                JacksonJaxbJsonProvider.DEFAULT_ANNOTATIONS));
 
         return jerseyConfig;
-    }
-
-    /**
-     * Configures a {@link JacksonJaxbJsonProvider} using the given {@link ObjectMapper}
-     * and the {@link JacksonJaxbJsonProvider#DEFAULT_ANNOTATIONS}
-     * on a new {@link ObjectMapper}.
-     *
-     * @param om The {@link ObjectMapper} used to map JSON from and into POJOs.
-     * @return The configured {@link JacksonJaxbJsonProvider}.
-     */
-    @Autowired
-    @Bean
-    public JacksonJaxbJsonProvider jacksonJaxbJsonProvider(ObjectMapper om) {
-        return new JacksonJaxbJsonProvider(om, JacksonJaxbJsonProvider.DEFAULT_ANNOTATIONS);
     }
 
     /**

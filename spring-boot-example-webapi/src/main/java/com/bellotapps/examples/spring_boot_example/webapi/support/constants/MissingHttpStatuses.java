@@ -1,4 +1,4 @@
-package com.bellotapps.examples.spring_boot_example.webapi.missing_http_statuses;
+package com.bellotapps.examples.spring_boot_example.webapi.support.constants;
 
 import javax.ws.rs.core.Response;
 import java.util.Arrays;

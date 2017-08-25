@@ -1,36 +1,33 @@
 package com.bellotapps.examples.spring_boot_example.webapi.dto;
 
 import com.bellotapps.examples.spring_boot_example.models.User;
-
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * Created by Juan Marcos Bellini on 15/8/17.
  * Questions at jbellini@bellotsapps.com
  */
-@XmlAccessorType
-@XmlRootElement(name = "")
 public class UserDto {
 
-
-    @XmlElement
+    @JsonProperty
     private long id;
 
-    @XmlElement
+    @JsonProperty
     private String fullName;
 
-    @XmlElement
     private String birthDate;
 
-    @XmlElement
+    @JsonProperty
     private String username;
 
-    @XmlElement
+    @JsonProperty
     private String email;
 
-    @XmlElement
+    @JsonProperty
+    private Dummy dummyEnum = Dummy.DUMMY1;
+
+    @SuppressWarnings("unused")
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
     public UserDto() {
@@ -64,4 +61,24 @@ public class UserDto {
     public String getEmail() {
         return email;
     }
+
+    public String getPassword() {
+        return password;
+    }
+
+    enum Dummy {
+        DUMMY1 {
+            @Override
+            public String toString() {
+                return "Foorro";
+            }
+        },
+        DUMMY2 {
+            @Override
+            public String toString() {
+                return "Foorro la concha de tu madre";
+            }
+        };
+    }
+
 }
