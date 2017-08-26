@@ -1,5 +1,6 @@
-package com.bellotapps.examples.spring_boot_example.error_handling.uniqueness;
+package com.bellotapps.examples.spring_boot_example.error_handling.helpers;
 
+import com.bellotapps.examples.spring_boot_example.error_handling.errros.UniqueViolationError;
 import com.bellotapps.examples.spring_boot_example.exceptions.UniqueViolationException;
 
 import java.util.List;

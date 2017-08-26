@@ -1,7 +1,7 @@
 package com.bellotapps.examples.spring_boot_example.services;
 
-import com.bellotapps.examples.spring_boot_example.error_handling.uniqueness.UniqueViolationError;
-import com.bellotapps.examples.spring_boot_example.error_handling.uniqueness.UniqueViolationExceptionThrower;
+import com.bellotapps.examples.spring_boot_example.error_handling.errros.UniqueViolationError;
+import com.bellotapps.examples.spring_boot_example.error_handling.helpers.UniqueViolationExceptionThrower;
 import com.bellotapps.examples.spring_boot_example.exceptions.NoSuchEntityException;
 import com.bellotapps.examples.spring_boot_example.exceptions.UnauthorizedException;
 import com.bellotapps.examples.spring_boot_example.interfaces.persistence.daos.UserDao;

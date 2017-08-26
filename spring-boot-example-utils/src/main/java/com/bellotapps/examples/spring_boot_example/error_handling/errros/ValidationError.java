@@ -1,11 +1,11 @@
-package com.bellotapps.examples.spring_boot_example.error_handling.validation;
+package com.bellotapps.examples.spring_boot_example.error_handling.errros;
 
 /**
  * Class representing an error that occurs when validating an entity.
  * There are two types of validation errors: a mandatory value is missing, or a value is not a legal one
  * (see {@link ErrorCause} for more information).
  */
-public class ValidationError {
+public final class ValidationError extends EntityError {
 
     /**
      * The {@link ErrorCause} representing what caused the new error.
@@ -17,10 +17,6 @@ public class ValidationError {
      */
     private final String field;
 
-    /**
-     * A helper message to be used for debugging purposes.
-     */
-    private final String message;
 
     /**
      * Constructor.
@@ -30,9 +26,9 @@ public class ValidationError {
      * @param message A helper message to be used for debugging purposes.
      */
     public ValidationError(ErrorCause cause, String field, String message) {
+        super(message);
         this.cause = cause;
         this.field = field;
-        this.message = message;
     }
 
 
@@ -50,12 +46,6 @@ public class ValidationError {
         return field;
     }
 
-    /**
-     * @return A helper message to be used for debugging purposes.
-     */
-    public String getMessage() {
-        return message;
-    }
 
     /**
      * En enum indicating types of validation errors.
