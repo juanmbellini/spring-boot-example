@@ -5,7 +5,7 @@ import com.bellotapps.examples.spring_boot_example.error_handling.helpers.Unique
 import com.bellotapps.examples.spring_boot_example.exceptions.NoSuchEntityException;
 import com.bellotapps.examples.spring_boot_example.exceptions.UnauthorizedException;
 import com.bellotapps.examples.spring_boot_example.interfaces.persistence.daos.UserDao;
-import com.bellotapps.examples.spring_boot_example.interfaces.persistence.speficication_creators.UserSpecificationCreator;
+import com.bellotapps.examples.spring_boot_example.interfaces.persistence.query_helpers.UserQueryHelper;
 import com.bellotapps.examples.spring_boot_example.interfaces.services.UserService;
 import com.bellotapps.examples.spring_boot_example.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +37,7 @@ public class UserServiceImpl implements UserService, UniqueViolationExceptionThr
     /**
      * Object in charge of creating {@link org.springframework.data.jpa.domain.Specification} of {@link User}s.
      */
-    private final UserSpecificationCreator userSpecificationCreator;
+    private final UserQueryHelper userQueryHelper;
 
     /**
      * {@link PasswordEncoder} used for hashing passwords when creating a new {@link User}.
@@ -45,10 +45,9 @@ public class UserServiceImpl implements UserService, UniqueViolationExceptionThr
     private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserServiceImpl(UserDao userDao, UserSpecificationCreator userSpecificationCreator,
-                           PasswordEncoder passwordEncoder) {
+    public UserServiceImpl(UserDao userDao, UserQueryHelper userQueryHelper, PasswordEncoder passwordEncoder) {
         this.userDao = userDao;
-        this.userSpecificationCreator = userSpecificationCreator;
+        this.userQueryHelper = userQueryHelper;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -62,8 +61,9 @@ public class UserServiceImpl implements UserService, UniqueViolationExceptionThr
     @Override
     public Page<User> findMatching(String fullName, LocalDate minBirthDate, LocalDate maxBirthDate,
                                    String username, String email, Pageable pageable) {
-        final Specification<User> matching = userSpecificationCreator
-                .create(fullName, minBirthDate, maxBirthDate, username, email);
+        userQueryHelper.validatePageable(pageable);
+        final Specification<User> matching = userQueryHelper
+                .createUserSpecification(fullName, minBirthDate, maxBirthDate, username, email);
         return userDao.findAll(matching, pageable);
     }
 

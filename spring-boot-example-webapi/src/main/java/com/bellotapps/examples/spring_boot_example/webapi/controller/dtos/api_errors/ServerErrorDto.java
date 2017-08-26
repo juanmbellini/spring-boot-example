@@ -3,7 +3,7 @@ package com.bellotapps.examples.spring_boot_example.webapi.controller.dtos.api_e
 /**
  * Data transfer object for API errors that are caused by the server.
  */
-public abstract class ServerErrorDto extends ApiErrorDto {
+public class ServerErrorDto extends ApiErrorDto {
 
     /**
      * Constructor.

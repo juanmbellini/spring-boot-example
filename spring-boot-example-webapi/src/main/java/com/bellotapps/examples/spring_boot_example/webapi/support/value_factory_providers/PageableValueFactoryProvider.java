@@ -2,8 +2,11 @@ package com.bellotapps.examples.spring_boot_example.webapi.support.value_factory
 
 import com.bellotapps.examples.spring_boot_example.webapi.support.annotation.PaginationParam;
 import com.bellotapps.examples.spring_boot_example.webapi.support.constants.DefaultValues;
+import com.bellotapps.examples.spring_boot_example.webapi.support.constants.MinAndMaxValues;
+import com.bellotapps.examples.spring_boot_example.webapi.support.exceptions.IllegalParamValueException;
 import org.glassfish.hk2.api.Factory;
 import org.glassfish.hk2.api.ServiceLocator;
+import org.glassfish.jersey.server.ParamException;
 import org.glassfish.jersey.server.internal.inject.AbstractContainerRequestValueFactory;
 import org.glassfish.jersey.server.model.Parameter;
 import org.glassfish.jersey.server.spi.internal.ValueFactoryProvider;
@@ -16,6 +19,7 @@ import javax.inject.Inject;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.ext.Provider;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -80,15 +84,26 @@ public class PageableValueFactoryProvider implements ValueFactoryProvider {
             final ParamsContainer container = new ParamsContainer();
             this.serviceLocator.inject(container); // Injects query params into the container object
 
+            final List<String> illegalValueParams = new LinkedList<>();
+            // Validate Page Number
+            if (container.page < 0) {
+                illegalValueParams.add("page");
+            }
+            // Validate Page Size
+            if (container.size < 0 || container.size > MinAndMaxValues.MAX_PAGE_SIZE) {
+                illegalValueParams.add("size");
+            }
+
             final List<Sort.Order> orders = container.sort.stream()
                     .map(str -> str.split(",", -1))
                     .map(propertyArray -> {
                         if (propertyArray.length == 0 || propertyArray.length > 2) {
-                            throw new RuntimeException("Bad request (more than one ',')"); // TODO: Define exception
+                            throw new ParamException.QueryParamException(null, "sort", "");
                         }
                         final String property = propertyArray[0];
                         if (property == null || !StringUtils.hasText(property)) {
-                            throw new RuntimeException("Bad request (null or empty property)"); // TODO: Define exception
+                            illegalValueParams.add("sort");
+                            return null;
                         }
                         if (propertyArray.length == 1) {
                             return new Sort.Order(property);
@@ -97,10 +112,17 @@ public class PageableValueFactoryProvider implements ValueFactoryProvider {
                             final Sort.Direction direction = Sort.Direction.fromString(propertyArray[1]);
                             return new Sort.Order(direction, property);
                         } catch (IllegalArgumentException e) {
-                            throw new RuntimeException("Bad request (asc or desc)"); // TODO: Define exception
+                            illegalValueParams.add("sort");
+                            return null;
                         }
                     })
                     .collect(Collectors.toList());
+
+            // Throw IllegalParamValueException if errors were detected.
+            if (!illegalValueParams.isEmpty()) {
+                throw new IllegalParamValueException(illegalValueParams);
+            }
+
             return new PageRequest(container.page, container.size, orders.isEmpty() ? null : new Sort(orders));
         }
 
