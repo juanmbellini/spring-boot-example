@@ -25,11 +25,6 @@ import java.util.function.BiConsumer;
 })
 public class User implements ValidationExceptionThrower {
 
-    /**
-     * The minimum age a user can have.
-     */
-    private static final int MINIMUM_AGE = 13;
-
 
     /**
      * The user's id.
@@ -332,7 +327,7 @@ public class User implements ValidationExceptionThrower {
                 errorList.add(ValidationErrorConstants.BIRTH_DATE_TOO_LONG_AGO);
             } else if (birthDate.isAfter(LocalDate.now())) {
                 errorList.add(ValidationErrorConstants.FUTURE_BIRTH_DATE);
-            } else if (birthDate.isAfter(LocalDate.now().minusYears(MINIMUM_AGE))) {
+            } else if (birthDate.isAfter(LocalDate.now().minusYears(ValidationConstants.MINIMUM_AGE))) {
                 errorList.add(ValidationErrorConstants.TOO_YOUNG_USER);
             }
         }
