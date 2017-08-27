@@ -23,7 +23,7 @@ public class TransactionExceptionMapper implements ExceptionMapper<TransactionEx
 
     @Override
     public Response toResponse(TransactionException exception) {
-        LOGGER.error("An uncaught exception was thrown", exception);
+        LOGGER.error("Could not access database", exception);
 
         return Response.status(Response.Status.SERVICE_UNAVAILABLE)
                 .entity(new ServerErrorDto("The service is currently unavailable"))
