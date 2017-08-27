@@ -6,9 +6,16 @@ package com.bellotapps.examples.spring_boot_example.webapi.controller.dtos.api_e
 public final class RepresentationErrorDto extends ClientErrorDto {
 
     /**
+     * The {@link RepresentationErrorDto} to be sent when there are representation errors.
+     * Using this constant avoids creating one each time there are problems.
+     */
+    public static final RepresentationErrorDto REPRESENTATION_ERROR_DTO = new RepresentationErrorDto();
+
+    /**
      * Constructor.
      */
-    public RepresentationErrorDto() {
+    private RepresentationErrorDto() {
         super(ErrorFamily.REPRESENTATION);
     }
+
 }
