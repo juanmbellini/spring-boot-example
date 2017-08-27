@@ -26,7 +26,7 @@ public class JDBCExceptionMapper implements ExceptionMapper<JDBCException> {
         LOGGER.error("Could not access database", exception);
 
         return Response.status(Response.Status.SERVICE_UNAVAILABLE)
-                .entity(new ServerErrorDto("The service is currently unavailable"))
+                .entity(ServerErrorDto.DATABASE_ACCESS_ERROR_DTO)
                 .build();
     }
 }
