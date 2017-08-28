@@ -6,6 +6,7 @@ import com.bellotapps.examples.spring_boot_example.exceptions.NoSuchEntityExcept
 import com.bellotapps.examples.spring_boot_example.exceptions.UnauthorizedException;
 import com.bellotapps.examples.spring_boot_example.interfaces.persistence.daos.UserDao;
 import com.bellotapps.examples.spring_boot_example.interfaces.persistence.query_helpers.UserQueryHelper;
+import com.bellotapps.examples.spring_boot_example.interfaces.secutiry.PasswordValidator;
 import com.bellotapps.examples.spring_boot_example.interfaces.services.UserService;
 import com.bellotapps.examples.spring_boot_example.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,14 +41,21 @@ public class UserServiceImpl implements UserService, UniqueViolationExceptionThr
     private final UserQueryHelper userQueryHelper;
 
     /**
+     * {@link PasswordValidator} used to check whether a password is valid.
+     */
+    private final PasswordValidator passwordValidator;
+
+    /**
      * {@link PasswordEncoder} used for hashing passwords when creating a new {@link User}.
      */
     private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserServiceImpl(UserDao userDao, UserQueryHelper userQueryHelper, PasswordEncoder passwordEncoder) {
+    public UserServiceImpl(UserDao userDao, UserQueryHelper userQueryHelper,
+                           PasswordValidator passwordValidator, PasswordEncoder passwordEncoder) {
         this.userDao = userDao;
         this.userQueryHelper = userQueryHelper;
+        this.passwordValidator = passwordValidator;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -91,7 +99,11 @@ public class UserServiceImpl implements UserService, UniqueViolationExceptionThr
         checkEmailUniqueness(email, errorList);
         throwUniqueViolationException(errorList);
 
-        final User user = new User(fullName, birthDate, username, email, passwordEncoder.encode(password));
+        passwordValidator.validate(password);
+
+
+        final User user = new User(fullName, birthDate, username, email,
+                Optional.ofNullable(password).map(passwordEncoder::encode).orElse(null));
         return userDao.save(user);
     }
 
