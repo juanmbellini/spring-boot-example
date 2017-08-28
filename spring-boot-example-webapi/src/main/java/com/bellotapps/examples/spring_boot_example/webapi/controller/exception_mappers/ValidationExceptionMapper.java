@@ -1,8 +1,8 @@
 package com.bellotapps.examples.spring_boot_example.webapi.controller.exception_mappers;
 
 import com.bellotapps.examples.spring_boot_example.exceptions.ValidationException;
+import com.bellotapps.examples.spring_boot_example.webapi.controller.Constants;
 import com.bellotapps.examples.spring_boot_example.webapi.controller.dtos.api_errors.ValidationErrorDto;
-import com.bellotapps.examples.spring_boot_example.webapi.support.constants.MissingHttpStatuses;
 
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
@@ -17,7 +17,7 @@ public class ValidationExceptionMapper implements ExceptionMapper<ValidationExce
 
     @Override
     public Response toResponse(ValidationException exception) {
-        return Response.status(MissingHttpStatuses.UNPROCESSABLE_ENTITY)
+        return Response.status(Constants.MissingHttpStatuses.UNPROCESSABLE_ENTITY)
                 .entity(new ValidationErrorDto(exception.getErrors()))
                 .build();
     }

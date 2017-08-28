@@ -1,9 +1,9 @@
 package com.bellotapps.examples.spring_boot_example.webapi.controller.dtos.entities;
 
 import com.bellotapps.examples.spring_boot_example.models.User;
-import com.bellotapps.examples.spring_boot_example.webapi.support.deserializers.Java8LocalDateClassicFormatDeserializer;
-import com.bellotapps.examples.spring_boot_example.webapi.support.serializers.Java8LocalDateClassicFormatSerializer;
-import com.bellotapps.examples.spring_boot_example.webapi.support.serializers.URISerializer;
+import com.bellotapps.examples.spring_boot_example.webapi.support.data_transfer.json.deserializers.Java8LocalDateClassicFormatDeserializer;
+import com.bellotapps.examples.spring_boot_example.webapi.support.data_transfer.json.serializers.Java8LocalDateClassicFormatSerializer;
+import com.bellotapps.examples.spring_boot_example.webapi.support.data_transfer.json.serializers.URISerializer;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;

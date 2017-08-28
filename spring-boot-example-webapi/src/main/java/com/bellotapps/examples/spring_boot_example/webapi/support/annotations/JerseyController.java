@@ -1,4 +1,4 @@
-package com.bellotapps.examples.spring_boot_example.webapi.support.annotation;
+package com.bellotapps.examples.spring_boot_example.webapi.support.annotations;
 
 import org.glassfish.jersey.server.ResourceConfig;
 import org.springframework.stereotype.Component;

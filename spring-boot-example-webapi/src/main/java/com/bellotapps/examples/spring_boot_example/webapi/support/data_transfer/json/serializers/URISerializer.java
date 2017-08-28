@@ -1,4 +1,4 @@
-package com.bellotapps.examples.spring_boot_example.webapi.support.serializers;
+package com.bellotapps.examples.spring_boot_example.webapi.support.data_transfer.json.serializers;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;

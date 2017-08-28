@@ -1,6 +1,6 @@
-package com.bellotapps.examples.spring_boot_example.webapi.support.deserializers;
+package com.bellotapps.examples.spring_boot_example.webapi.support.data_transfer.json.deserializers;
 
-import com.bellotapps.examples.spring_boot_example.webapi.support.constants.Formatters;
+import com.bellotapps.examples.spring_boot_example.webapi.support.data_transfer.DateTimeFormatters;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
@@ -8,18 +8,19 @@ import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
 /**
  * {@link com.fasterxml.jackson.databind.JsonDeserializer} to transform a {@link String} to a {@link LocalDate},
- * using {@link Formatters#CLASSIC_DATE_FORMATTER}.
+ * using {@link DateTimeFormatters#ISO_LOCAL_DATE} {@link DateTimeFormatter}.
  */
-public class Java8LocalDateClassicFormatDeserializer extends StdDeserializer<LocalDate> {
+public class Java8ISOLocalDateDeserializer extends StdDeserializer<LocalDate> {
 
     /**
      * Default constructor.
      */
-    protected Java8LocalDateClassicFormatDeserializer() {
+    protected Java8ISOLocalDateDeserializer() {
         super(LocalDate.class);
     }
 
@@ -28,7 +29,7 @@ public class Java8LocalDateClassicFormatDeserializer extends StdDeserializer<Loc
             throws IOException {
         final String dateString = p.getText();
         try {
-            return LocalDate.from(Formatters.CLASSIC_DATE_FORMATTER.parse(dateString));
+            return LocalDate.from(DateTimeFormatters.ISO_LOCAL_DATE.getFormatter().parse(dateString));
         } catch (DateTimeParseException e) {
             throw new JsonParseException(p, "Unable to deserialize the date", e);
         }

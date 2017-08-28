@@ -36,9 +36,9 @@ public class AppConfig {
     public ResourceConfig jerseyConfig() {
         final ResourceConfig jerseyConfig = new ResourceConfig();
         registerPackages(jerseyConfig,
-                "com.bellotapps.examples.spring_boot_example.webapi.controller.endpoints",
+                "com.bellotapps.examples.spring_boot_example.webapi.controller.rest_endpoints",
                 "com.bellotapps.examples.spring_boot_example.webapi.controller.exception_mappers",
-                "com.bellotapps.examples.spring_boot_example.webapi.support.value_factory_providers");
+                "com.bellotapps.examples.spring_boot_example.webapi.support.data_transfer.jersey_providers");
         jerseyConfig.register(new JacksonJaxbJsonProvider(jacksonObjectMapper(),
                 JacksonJaxbJsonProvider.DEFAULT_ANNOTATIONS));
 

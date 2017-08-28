@@ -1,4 +1,4 @@
-package com.bellotapps.examples.spring_boot_example.webapi.support.annotation;
+package com.bellotapps.examples.spring_boot_example.webapi.support.annotations;
 
 import java.lang.annotation.*;
 

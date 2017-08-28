@@ -1,8 +1,7 @@
-package com.bellotapps.examples.spring_boot_example.webapi.support.value_factory_providers;
+package com.bellotapps.examples.spring_boot_example.webapi.support.data_transfer.jersey_providers;
 
-import com.bellotapps.examples.spring_boot_example.webapi.support.annotation.PaginationParam;
-import com.bellotapps.examples.spring_boot_example.webapi.support.constants.DefaultValues;
-import com.bellotapps.examples.spring_boot_example.webapi.support.constants.MinAndMaxValues;
+import com.bellotapps.examples.spring_boot_example.webapi.controller.Constants;
+import com.bellotapps.examples.spring_boot_example.webapi.support.annotations.PaginationParam;
 import com.bellotapps.examples.spring_boot_example.webapi.support.exceptions.IllegalParamValueException;
 import org.glassfish.hk2.api.Factory;
 import org.glassfish.hk2.api.ServiceLocator;
@@ -90,7 +89,7 @@ public class PageableValueFactoryProvider implements ValueFactoryProvider {
                 illegalValueParams.add("page");
             }
             // Validate Page Size
-            if (container.size < 0 || container.size > MinAndMaxValues.MAX_PAGE_SIZE) {
+            if (container.size < 0 || container.size > Constants.MAX_PAGE_SIZE) {
                 illegalValueParams.add("size");
             }
 
@@ -132,12 +131,12 @@ public class PageableValueFactoryProvider implements ValueFactoryProvider {
         private static final class ParamsContainer {
 
             @QueryParam("page")
-            @DefaultValue(DefaultValues.DEFAULT_PAGE_NUMBER_STRING)
+            @DefaultValue(Constants.DEFAULT_PAGE_NUMBER_STRING)
             @SuppressWarnings("unused")
             private Integer page;
 
             @QueryParam("size")
-            @DefaultValue(DefaultValues.DEFAULT_PAGE_SIZE_STRING)
+            @DefaultValue(Constants.DEFAULT_PAGE_SIZE_STRING)
             @SuppressWarnings("unused")
             private Integer size;
 
