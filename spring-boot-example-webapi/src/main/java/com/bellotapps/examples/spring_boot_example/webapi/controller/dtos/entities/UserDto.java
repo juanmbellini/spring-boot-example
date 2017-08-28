@@ -16,8 +16,8 @@ import java.time.LocalDate;
  */
 public class UserDto {
 
-    @JsonProperty
-    private long id;
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private Long id;
 
     @JsonProperty
     private String fullName;
@@ -61,7 +61,7 @@ public class UserDto {
         this.locationUrl = locationUrl;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
