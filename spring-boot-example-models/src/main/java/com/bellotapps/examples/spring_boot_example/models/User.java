@@ -154,7 +154,7 @@ public class User implements ValidationExceptionThrower {
      */
     public void changeUsername(String username) {
         final List<ValidationError> errorList = new LinkedList<>();
-        changeEmail(username, errorList);
+        changeUsername(username, errorList);
         throwValidationException(errorList); // Throws ValidationException if the username was not valid
     }
 
