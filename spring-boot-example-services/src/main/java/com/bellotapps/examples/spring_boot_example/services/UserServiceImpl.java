@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -100,10 +101,9 @@ public class UserServiceImpl implements UserService, UniqueViolationExceptionThr
         throwUniqueViolationException(errorList);
 
         passwordValidator.validate(password);
-
-
-        final User user = new User(fullName, birthDate, username, email,
-                Optional.ofNullable(password).map(passwordEncoder::encode).orElse(null));
+        // Just in case validate did not check the password is null...
+        Objects.requireNonNull(password, "The password must not be null");
+        final User user = new User(fullName, birthDate, username, email, passwordEncoder.encode(password));
         return userDao.save(user);
     }
 
@@ -145,10 +145,13 @@ public class UserServiceImpl implements UserService, UniqueViolationExceptionThr
         final User user = userDao.findById(id).orElseThrow(NoSuchEntityException::new);
 
         // If currentPassword doesn't match with the actual password, do not change it
-        if (!passwordEncoder.matches(currentPassword, user.getHashedPassword())) {
+        if (currentPassword == null || !passwordEncoder.matches(currentPassword, user.getHashedPassword())) {
             throw new UnauthorizedException("The given current password did not match the user's password");
         }
-        user.changePassword(newPassword);
+        passwordValidator.validate(newPassword);
+        // Just in case validate did not check the password is null...
+        Objects.requireNonNull(newPassword, "The new password must not be null");
+        user.changePassword(passwordEncoder.encode(newPassword));
         userDao.save(user);
     }
 
