@@ -61,10 +61,6 @@ public class UserDto {
         this.locationUrl = locationUrl;
     }
 
-    public Long getId() {
-        return id;
-    }
-
     public String getFullName() {
         return fullName;
     }
@@ -85,7 +81,27 @@ public class UserDto {
         return password;
     }
 
-    public URI getLocationUrl() {
-        return locationUrl;
+    /**
+     * Data transfer object for getting password change values (i.e current password and new password)
+     */
+    public static final class PasswordChangeDto {
+
+        @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+        private String currentPassword;
+
+        @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+        private String newPassword;
+
+        public PasswordChangeDto() {
+            // For Jersey
+        }
+
+        public String getCurrentPassword() {
+            return currentPassword;
+        }
+
+        public String getNewPassword() {
+            return newPassword;
+        }
     }
 }
