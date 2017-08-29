@@ -3,7 +3,7 @@
 
     <!--
         In development, the application will log
-        DEBUG messages for own classes, and
+        DEBUG messages for own classes and SQL statements executed by Hibernate, and
         INFO messages for the rest of classes,
         into the console and into a file specified by custom.rolling-policy.max-history property
     -->
@@ -17,6 +17,11 @@
         <appender-ref ref="CONSOLE"/>
         <appender-ref ref="FILE-APPENDER"/>
     </root>
+    <!-- Log SQL queries made by Hibernate -->
+    <logger name="org.hibernate.SQL" level="DEBUG" additivity="false">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="FILE-APPENDER"/>
+    </logger>
     <logger name="com.bellotapps.examples.spring_boot_example" level="DEBUG" additivity="false">
         <appender-ref ref="CONSOLE"/>
         <appender-ref ref="FILE-APPENDER"/>

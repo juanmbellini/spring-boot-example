@@ -3,14 +3,11 @@
 spring:
     profiles:
         active: dev
+
     jersey:
         application-path: /
         servlet:
             load-on-startup: 1
-
-    jpa:
-        hibernate:
-            ddl-auto: none
 
     # Mock datasource for booting purposes
     # Change as needed
@@ -19,16 +16,25 @@ spring:
         username: spring-boot
         password: spring-boot
 
+    jpa:
+        hibernate:
+            ddl-auto: none
+        properties:
+            hibernate:
+                show_sql: false
+                format_sql: false
+
+
 logging:
     path: /tmp/logs/com.bellotapps.examples/spring-boot-example
-
-custom:
-    rolling-policy:
-        max-history: 5
 
 security:
     sessions: stateless
 
+
+custom:
+    rolling-policy:
+        max-history: 5
 
 ---
 # Configuration for Development Environment
@@ -54,12 +60,6 @@ spring:
     profiles:
         - staging
 
-    jpa:
-        properties:
-            hibernate:
-                show_sql: true
-                format_sql: false
-
 logging:
     config: classpath:logging/logback-spring-staging.xml
 
@@ -70,11 +70,6 @@ spring:
     profiles:
         - prod
         - production
-    jpa:
-        properties:
-            hibernate:
-                show_sql: false
-                format_sql: false
 
 logging:
     config: classpath:logging/logback-spring-prod.xml
