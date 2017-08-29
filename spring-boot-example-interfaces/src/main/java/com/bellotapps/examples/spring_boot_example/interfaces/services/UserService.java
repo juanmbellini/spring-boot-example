@@ -5,19 +5,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Optional;
 
 /**
  * Defines behaviour of the service in charge of managing {@link User}s.
  */
 public interface UserService {
-
-    /**
-     * @return The {@link List} of {@link User}s registered in the application.
-     */
-    @Deprecated
-    List<User> getAll();
 
     /**
      * Finds stored {@link User}s, applying optional filters and pagination.

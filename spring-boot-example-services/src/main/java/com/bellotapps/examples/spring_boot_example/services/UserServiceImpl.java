@@ -12,7 +12,6 @@ import com.bellotapps.examples.spring_boot_example.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -25,7 +24,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 /**
- * Concrete implementation of {@link UserService}
+ * Concrete implementation of {@link UserService}.
  */
 @Service
 @Transactional(readOnly = true)
@@ -58,12 +57,6 @@ public class UserServiceImpl implements UserService, UniqueViolationExceptionThr
         this.userQueryHelper = userQueryHelper;
         this.passwordValidator = passwordValidator;
         this.passwordEncoder = passwordEncoder;
-    }
-
-
-    @Override
-    public List<User> getAll() {
-        return userDao.findAll(new Sort(new Sort.Order(Sort.Direction.ASC, "id")));
     }
 
 
