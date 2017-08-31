@@ -14,7 +14,6 @@ import java.util.Objects;
  */
 /* package */ class PersistenceHelper {
 
-
     /**
      * Creates a {@link Predicate} representing a "like",
      * which matches the given {@code attributeName}

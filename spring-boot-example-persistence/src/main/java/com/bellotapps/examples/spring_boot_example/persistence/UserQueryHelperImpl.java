@@ -1,7 +1,7 @@
 package com.bellotapps.examples.spring_boot_example.persistence;
 
 import com.bellotapps.examples.spring_boot_example.exceptions.InvalidPropertiesException;
-import com.bellotapps.examples.spring_boot_example.interfaces.persistence.query_helpers.UserQueryHelper;
+import com.bellotapps.examples.spring_boot_example.persistence.query_helpers.UserQueryHelper;
 import com.bellotapps.examples.spring_boot_example.models.User;
 import org.hibernate.criterion.MatchMode;
 import org.springframework.data.domain.Pageable;

@@ -22,10 +22,9 @@
         <!-- Project modules -->
         <dependency>
             <groupId>com.bellotapps.examples</groupId>
-            <artifactId>spring-boot-example-interfaces</artifactId>
+            <artifactId>spring-boot-example-persistence-interfaces</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
-
 
         <!-- External Libraries -->
         <!-- Spring boot starter -->
