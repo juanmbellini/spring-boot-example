@@ -25,7 +25,7 @@
         <services-interfaces-module>spring-boot-example-services-interfaces</services-interfaces-module>
         <persistence-module>spring-boot-example-persistence</persistence-module>
         <services-module>spring-boot-example-services</services-module>
-        <webapi-module>spring-boot-example-webapi</webapi-module>
+        <webapp-module>spring-boot-example-webapp</webapp-module>
 
         <!-- ********************** -->
         <!--        Versions        -->
@@ -48,7 +48,7 @@
         <module>${services-interfaces-module}</module>
         <module>${persistence-module}</module>
         <module>${services-module}</module>
-        <module>${webapi-module}</module>
+        <module>${webapp-module}</module>
     </modules>
 
 
