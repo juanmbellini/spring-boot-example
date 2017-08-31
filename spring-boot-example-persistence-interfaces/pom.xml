@@ -11,38 +11,26 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>spring-boot-example-services</artifactId>
-    <name>spring-boot-example-services</name>
+    <artifactId>spring-boot-example-persistence-interfaces</artifactId>
+    <name>spring-boot-example-persistence-interfaces</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
     <dependencies>
-        <!-- Project modules -->
+        <!-- Project Modules -->
         <dependency>
             <groupId>com.bellotapps.examples</groupId>
-            <artifactId>spring-boot-example-persistence-interfaces</artifactId>
-            <version>${project.parent.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.bellotapps.examples</groupId>
-            <artifactId>spring-boot-example-services-interfaces</artifactId>
+            <artifactId>spring-boot-example-core</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
 
         <!-- External Libraries -->
-        <!-- Spring boot starter -->
+        <!-- Spring data JPA for DAOs definitions -->
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter</artifactId>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-jpa</artifactId>
         </dependency>
-
-        <!-- Spring Security (for password encryption) -->
-        <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-core</artifactId>
-        </dependency>
-
     </dependencies>
 </project>

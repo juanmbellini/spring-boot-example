@@ -17,27 +17,18 @@ public class Constants {
      */
     public static final String DEFAULT_PAGE_NUMBER_STRING = "0";
     /**
-     * The default page number.
-     */
-    public static final Integer DEFAULT_PAGE_NUMBER = Integer.valueOf(DEFAULT_PAGE_NUMBER_STRING);
-    /**
      * The default page size (in string format).
      */
     public static final String DEFAULT_PAGE_SIZE_STRING = "25";
+    /**
+     * The default page number.
+     */
+    public static final Integer DEFAULT_PAGE_NUMBER = Integer.valueOf(DEFAULT_PAGE_NUMBER_STRING);
     /**
      * The default page size.
      */
     public static final int DEFAULT_PAGE_SIZE = Integer.valueOf(DEFAULT_PAGE_SIZE_STRING);
 
-
-    // ================================================================
-    // API Root Endpoints
-    // ================================================================
-
-    /**
-     * Endpoint for {@link com.bellotapps.examples.spring_boot_example.models.User} management.
-     */
-    public static final String USERS_ENDPOINT = "users";
 
     // ================================================================
     // Minimum and Maximum values
@@ -57,7 +48,7 @@ public class Constants {
      * Enum containing missing {@link javax.ws.rs.core.Response.StatusType}
      * not included in {@link javax.ws.rs.core.Response.Status} enum.
      */
-    public static enum MissingHttpStatuses implements Response.StatusType {
+    public enum MissingHttpStatuses implements Response.StatusType {
         UNPROCESSABLE_ENTITY(422, "Unprocessable Entity");
 
         /**

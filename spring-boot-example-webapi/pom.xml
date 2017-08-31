@@ -26,12 +26,19 @@
         <!-- Project modules -->
         <dependency>
             <groupId>com.bellotapps.examples</groupId>
-            <artifactId>spring-boot-example-interfaces</artifactId>
+            <artifactId>spring-boot-example-services-interfaces</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
+
         <dependency>
             <groupId>com.bellotapps.examples</groupId>
             <artifactId>spring-boot-example-services</artifactId>
+            <version>${project.parent.version}</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.bellotapps.examples</groupId>
+            <artifactId>spring-boot-example-persistence</artifactId>
             <version>${project.parent.version}</version>
             <scope>runtime</scope>
         </dependency>
@@ -56,6 +63,12 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-configuration-processor</artifactId>
             <optional>true</optional>
+        </dependency>
+
+        <!-- Spring TX to have Exceptions that can be thrown from services -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-tx</artifactId>
         </dependency>
 
 

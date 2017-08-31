@@ -1,9 +1,8 @@
 package com.bellotapps.examples.spring_boot_example.webapi.controller.rest_endpoints;
 
 import com.bellotapps.examples.spring_boot_example.error_handling.helpers.ValidationExceptionThrower;
-import com.bellotapps.examples.spring_boot_example.interfaces.services.UserService;
+import com.bellotapps.examples.spring_boot_example.services.UserService;
 import com.bellotapps.examples.spring_boot_example.models.User;
-import com.bellotapps.examples.spring_boot_example.webapi.controller.Constants;
 import com.bellotapps.examples.spring_boot_example.webapi.controller.dtos.entities.StringValueDto;
 import com.bellotapps.examples.spring_boot_example.webapi.controller.dtos.entities.UserDto;
 import com.bellotapps.examples.spring_boot_example.webapi.support.annotations.Java8Time;
@@ -33,10 +32,15 @@ import java.util.stream.Collectors;
 /**
  * API endpoint for {@link User}s management.
  */
-@Path(Constants.USERS_ENDPOINT)
+@Path(UserEndpoint.USERS_ENDPOINT)
 @Produces(MediaType.APPLICATION_JSON)
 @JerseyController
 public class UserEndpoint implements ValidationExceptionThrower {
+
+    /**
+     * Endpoint for {@link User} management.
+     */
+    public static final String USERS_ENDPOINT = "users";
 
     /**
      * The {@link Logger} object.
@@ -242,7 +246,7 @@ public class UserEndpoint implements ValidationExceptionThrower {
      */
     private static URI getLocationUri(User user, UriInfo uriInfo) {
         return uriInfo.getBaseUriBuilder().clone()
-                .path(Constants.USERS_ENDPOINT)
+                .path(USERS_ENDPOINT)
                 .path(Long.toString(user.getId()))
                 .build();
     }

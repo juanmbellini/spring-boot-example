@@ -4,10 +4,9 @@ import com.bellotapps.examples.spring_boot_example.error_handling.errros.UniqueV
 import com.bellotapps.examples.spring_boot_example.error_handling.helpers.UniqueViolationExceptionThrower;
 import com.bellotapps.examples.spring_boot_example.exceptions.NoSuchEntityException;
 import com.bellotapps.examples.spring_boot_example.exceptions.UnauthorizedException;
-import com.bellotapps.examples.spring_boot_example.interfaces.persistence.daos.UserDao;
-import com.bellotapps.examples.spring_boot_example.interfaces.persistence.query_helpers.UserQueryHelper;
-import com.bellotapps.examples.spring_boot_example.interfaces.secutiry.PasswordValidator;
-import com.bellotapps.examples.spring_boot_example.interfaces.services.UserService;
+import com.bellotapps.examples.spring_boot_example.persistence.daos.UserDao;
+import com.bellotapps.examples.spring_boot_example.persistence.query_helpers.UserQueryHelper;
+import com.bellotapps.examples.spring_boot_example.security.PasswordValidator;
 import com.bellotapps.examples.spring_boot_example.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

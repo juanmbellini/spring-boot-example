@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
  */
 @Configuration
 @EnableJpaRepositories(basePackages = {
-        "com.bellotapps.examples.spring_boot_example.interfaces.persistence.daos",
+        "com.bellotapps.examples.spring_boot_example.persistence.daos",
 })
 @EntityScan("com.bellotapps.examples.spring_boot_example.models")
 public class PersistenceConfig {
