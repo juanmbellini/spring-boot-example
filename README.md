@@ -1,4 +1,4 @@
-# Spring Boot Example [![GitHub license](https://img.shields.io/badge/license-Apache%20License%202.0-blue.svg?style=flat)](http://www.apache.org/licenses/LICENSE-2.0)
+# Spring Boot Example [![GitHub license](https://img.shields.io/badge/license-Apache%20License%202.0-blue.svg?style=flat)](http://www.apache.org/licenses/LICENSE-2.0) [![Build Status](https://travis-ci.org/juanmbellini/spring-boot-example.svg?branch=master)](https://travis-ci.org/juanmbellini/spring-boot-example)
 
 An example project using Spring Boot.
 
