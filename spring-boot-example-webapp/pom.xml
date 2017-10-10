@@ -82,6 +82,12 @@
             <artifactId>flyway-core</artifactId>
         </dependency>
 
+        <!-- Error management -->
+        <dependency>
+            <groupId>com.bellotapps.utils</groupId>
+            <artifactId>error-handler</artifactId>
+        </dependency>
+
 
     </dependencies>
 
