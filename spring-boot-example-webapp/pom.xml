@@ -88,6 +88,11 @@
             <artifactId>error-handler</artifactId>
         </dependency>
 
+        <!-- Apache Commons IO to transform an input stream from a request into a dto (in JSON Auth filter) -->
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+        </dependency>
 
     </dependencies>
 

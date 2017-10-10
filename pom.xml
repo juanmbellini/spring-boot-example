@@ -36,6 +36,7 @@
         <!-- Dependencies -->
         <org.springframework.boot.version>1.5.8.RELEASE</org.springframework.boot.version>
         <org.flywaydb.version>4.2.0</org.flywaydb.version>
+        <apache-commons-io.version>2.5</apache-commons-io.version>
         <commons-validator.version>1.6</commons-validator.version>
         <com.bellotapps.utils.error-handler.version>1.0.1-RELEASE</com.bellotapps.utils.error-handler.version>
         <junit.version>RELEASE</junit.version>
@@ -52,10 +53,8 @@
         <module>${webapp-module}</module>
     </modules>
 
-
     <dependencyManagement>
         <dependencies>
-
             <!-- Spring boot dependencies -->
             <!-- Spring Boot dependency management import -->
             <dependency>
@@ -74,6 +73,12 @@
                 <version>${org.flywaydb.version}</version>
             </dependency>
 
+            <!-- Apache Commons IO -->
+            <dependency>
+                <groupId>commons-io</groupId>
+                <artifactId>commons-io</artifactId>
+                <version>${apache-commons-io.version}</version>
+            </dependency>
             <!-- Apache Commons Validator -->
             <dependency>
                 <groupId>commons-validator</groupId>
