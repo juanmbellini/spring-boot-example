@@ -37,6 +37,7 @@
         <org.springframework.boot.version>1.5.7.RELEASE</org.springframework.boot.version>
         <org.flywaydb.version>4.2.0</org.flywaydb.version>
         <commons-validator.version>1.6</commons-validator.version>
+        <com.bellotapps.utils.error-handler.version>1.0.1-RELEASE</com.bellotapps.utils.error-handler.version>
         <junit.version>RELEASE</junit.version>
 
     </properties>
@@ -79,6 +80,13 @@
                 <artifactId>commons-validator</artifactId>
                 <version>${commons-validator.version}</version>
             </dependency>
+            <!-- Error management -->
+            <dependency>
+                <groupId>com.bellotapps.utils</groupId>
+                <artifactId>error-handler</artifactId>
+                <version>${com.bellotapps.utils.error-handler.version}</version>
+            </dependency>
+
             <!-- JUnit -->
             <dependency>
                 <groupId>junit</groupId>
