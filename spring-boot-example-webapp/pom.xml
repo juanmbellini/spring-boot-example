@@ -94,6 +94,12 @@
             <artifactId>commons-io</artifactId>
         </dependency>
 
+        <!-- JSON Web Tokens-->
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt</artifactId>
+        </dependency>
+
     </dependencies>
 
     <build>

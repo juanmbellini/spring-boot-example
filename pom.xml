@@ -39,6 +39,7 @@
         <apache-commons-io.version>2.5</apache-commons-io.version>
         <commons-validator.version>1.6</commons-validator.version>
         <com.bellotapps.utils.error-handler.version>1.0.1-RELEASE</com.bellotapps.utils.error-handler.version>
+        <io.jsonwebtoken.jjwt.version>0.9.0</io.jsonwebtoken.jjwt.version>
         <junit.version>RELEASE</junit.version>
 
     </properties>
@@ -90,6 +91,13 @@
                 <groupId>com.bellotapps.utils</groupId>
                 <artifactId>error-handler</artifactId>
                 <version>${com.bellotapps.utils.error-handler.version}</version>
+            </dependency>
+
+            <!-- JSON Web Tokens-->
+            <dependency>
+                <groupId>io.jsonwebtoken</groupId>
+                <artifactId>jjwt</artifactId>
+                <version>${io.jsonwebtoken.jjwt.version}</version>
             </dependency>
 
             <!-- JUnit -->
