@@ -1,8 +1,8 @@
 package com.bellotapps.examples.spring_boot_example.web.controller.rest_endpoints;
 
 import com.bellotapps.examples.spring_boot_example.error_handling.helpers.ValidationExceptionThrower;
-import com.bellotapps.examples.spring_boot_example.services.UserService;
 import com.bellotapps.examples.spring_boot_example.models.User;
+import com.bellotapps.examples.spring_boot_example.services.UserService;
 import com.bellotapps.examples.spring_boot_example.web.controller.dtos.entities.StringValueDto;
 import com.bellotapps.examples.spring_boot_example.web.controller.dtos.entities.UserDto;
 import com.bellotapps.examples.spring_boot_example.web.support.annotations.Java8Time;
@@ -40,7 +40,7 @@ public class UserEndpoint implements ValidationExceptionThrower {
     /**
      * Endpoint for {@link User} management.
      */
-    public static final String USERS_ENDPOINT = "users";
+    public static final String USERS_ENDPOINT = "/users";
 
     /**
      * The {@link Logger} object.
