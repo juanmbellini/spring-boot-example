@@ -22,6 +22,10 @@
         <appender-ref ref="CONSOLE"/>
         <appender-ref ref="FILE-APPENDER"/>
     </logger>
+    <logger name="com.bellotapps.utils.error_handler" level="DEBUG" additivity="false">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="FILE-APPENDER"/>
+    </logger>
     <logger name="com.bellotapps.examples.spring_boot_example" level="DEBUG" additivity="false">
         <appender-ref ref="CONSOLE"/>
         <appender-ref ref="FILE-APPENDER"/>
