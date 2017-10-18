@@ -42,6 +42,9 @@ security:
 custom:
     rolling-policy:
         max-history: 5
+    security:
+        jwt:
+          duration: 300
 
 ---
 # Configuration for Development Environment
@@ -58,6 +61,12 @@ spring:
 
 logging:
     config: classpath:logging/logback-spring-dev.xml
+
+custom:
+    security:
+        jwt:
+            signing-key: supersecretkey
+
 
 ---
 # Configuration for Staging Environment
