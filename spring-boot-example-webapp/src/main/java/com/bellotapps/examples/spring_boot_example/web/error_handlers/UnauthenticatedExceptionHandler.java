@@ -23,8 +23,9 @@ import javax.ws.rs.core.Response;
 
     @Override
     public ErrorHandler.HandlingResult handle(UnauthenticatedException exception) {
-        LOGGER.debug("A user was not authenticated", exception);
+        LOGGER.debug("A user was not authenticated. UnauthenticatedException message: {}", exception.getMessage());
+        LOGGER.trace("UnauthenticatedException Stack trace: ", exception);
 
-        return new ErrorHandler.HandlingResult(Response.Status.UNAUTHORIZED.getStatusCode(), "");
+        return new ErrorHandler.HandlingResult(Response.Status.UNAUTHORIZED.getStatusCode(), null);
     }
 }
