@@ -16,7 +16,7 @@ import java.util.Optional;
  * Object in charge of managing JWT operations (generation and validation).
  */
 @Component
-public class JwtAgent implements TokenGenerator, JwtCompiler {
+/* package */ class JwtAgent implements TokenGenerator, JwtCompiler {
 
     private final static String USER_ID_CLAIM_NAME = "uid";
 
@@ -41,7 +41,7 @@ public class JwtAgent implements TokenGenerator, JwtCompiler {
      * @param secretKey The secret key used to sign the tokens
      * @param duration  The duration of tokens, in seconds
      */
-    public JwtAgent(@Value("${custom.security.jwt.signing-key}") String secretKey,
+    /* package */ JwtAgent(@Value("${custom.security.jwt.signing-key}") String secretKey,
                     @Value("${custom.security.jwt.duration}") Long duration) {
         this.base64EncodedSecretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
         this.duration = duration * 1000;

@@ -3,14 +3,15 @@ package com.bellotapps.examples.spring_boot_example.web.security.authentication;
 import com.bellotapps.examples.spring_boot_example.exceptions.UnauthenticatedException;
 
 /**
- * Exception thrown when there are JWT issues (e.g invalid token, expired token, etc).
+ * Exception thrown when there are JWT issues
+ * (e.g invalid token, expired token, wrong or missing signature, blacklisted, etc).
  */
-public class JwtException extends UnauthenticatedException {
+/* package */ class JwtException extends UnauthenticatedException {
 
     /**
      * Default constructor.
      */
-    public JwtException() {
+    /* package */ JwtException() {
         super();
     }
 
@@ -19,7 +20,7 @@ public class JwtException extends UnauthenticatedException {
      *
      * @param message The detail message, which is saved for later retrieval by the {@link #getMessage()} method.
      */
-    public JwtException(String message) {
+    /* package */ JwtException(String message) {
         super(message);
     }
 
@@ -30,7 +31,7 @@ public class JwtException extends UnauthenticatedException {
      * @param cause   The cause (which is saved for later retrieval by the {@link #getCause()} method).
      *                For more information, see {@link RuntimeException#RuntimeException(Throwable)}.
      */
-    public JwtException(String message, Throwable cause) {
+    /* package */ JwtException(String message, Throwable cause) {
         super(message, cause);
     }
 }
