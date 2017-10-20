@@ -5,7 +5,7 @@ import io.jsonwebtoken.Claims;
 /**
  * Defines behaviour for an object than can parse JWT tokens.
  */
-public interface JWTParser {
+public interface JwtParser {
 
     /**
      * Parses the given token, transforming it into the {@link Claims} set in it.

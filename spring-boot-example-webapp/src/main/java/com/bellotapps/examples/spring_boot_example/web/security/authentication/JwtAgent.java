@@ -16,7 +16,7 @@ import java.util.Optional;
  * Object in charge of managing JWT operations (generation and validation).
  */
 @Component
-public class JWTAgent implements TokenGenerator, JWTParser {
+public class JwtAgent implements TokenGenerator, JwtParser {
 
     /**
      * The secret key used to sign the tokens, encoded in base 64.
@@ -39,7 +39,7 @@ public class JWTAgent implements TokenGenerator, JWTParser {
      * @param secretKey The secret key used to sign the tokens
      * @param duration  The duration of tokens, in seconds
      */
-    public JWTAgent(@Value("${custom.security.jwt.signing-key}") String secretKey,
+    public JwtAgent(@Value("${custom.security.jwt.signing-key}") String secretKey,
                     @Value("${custom.security.jwt.duration}") Long duration) {
         this.base64EncodedSecretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
         this.duration = duration * 1000;
