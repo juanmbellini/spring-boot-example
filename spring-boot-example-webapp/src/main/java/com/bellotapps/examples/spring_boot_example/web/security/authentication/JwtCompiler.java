@@ -1,20 +1,20 @@
 package com.bellotapps.examples.spring_boot_example.web.security.authentication;
 
-import io.jsonwebtoken.Claims;
-
 /**
- * Defines behaviour for an object than can parse JWT tokens.
+ * Defines behaviour for an object than can compile JWT tokens.
  */
-public interface JwtParser {
+public interface JwtCompiler {
 
     /**
-     * Parses the given token, transforming it into the {@link Claims} set in it.
+     * Compiles the given token, transforming it into the {@link JwtTokenData} with information taken from the token.
      *
-     * @param jwtToken The token to be parsed.
-     * @return The {@link Claims} in the token.
-     * @throws IllegalArgumentException If the given {@code jwtToken} is null or if it does not have text.
+     * @param rawToken The token to be compiled.
+     * @return The {@link JwtTokenData} compiled from the token.
+     * @throws IllegalArgumentException If the given {@code rawToken} is null or if it does not have text.
+     * @throws JwtException             If the compilation process failed
+     *                                  (i.e malformed token, expired token, wrong signature, blacklisted, etc.).
      */
-    JwtTokenData parse(String jwtToken) throws IllegalArgumentException;
+    JwtTokenData compile(String rawToken) throws IllegalArgumentException, JwtException;
 
     /**
      * Container class wrapping data in a JWT.

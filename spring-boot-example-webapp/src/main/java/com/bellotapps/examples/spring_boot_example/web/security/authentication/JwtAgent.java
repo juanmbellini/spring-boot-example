@@ -16,7 +16,7 @@ import java.util.Optional;
  * Object in charge of managing JWT operations (generation and validation).
  */
 @Component
-public class JwtAgent implements TokenGenerator, JwtParser {
+public class JwtAgent implements TokenGenerator, JwtCompiler {
 
     private final static String USER_ID_CLAIM_NAME = "uid";
 
@@ -66,16 +66,18 @@ public class JwtAgent implements TokenGenerator, JwtParser {
     }
 
     @Override
-    public JwtTokenData parse(String jwtToken) throws IllegalArgumentException {
-        if (!StringUtils.hasText(jwtToken)) {
+    public JwtTokenData compile(String rawToken) throws IllegalArgumentException {
+        if (!StringUtils.hasText(rawToken)) {
             throw new IllegalArgumentException("The token must not be null or empty");
         }
 
         try {
             final Claims claims = Jwts.parser()
                     .setSigningKey(base64EncodedSecretKey)
-                    .parse(jwtToken, CustomJwtHandlerAdapter.getInstance())
+                    .parse(rawToken, CustomJwtHandlerAdapter.getInstance())
                     .getBody();
+
+            // TODO: check blacklisted
 
             final long userId = (long) claims.get(USER_ID_CLAIM_NAME);  // Previous step validated this value.
             final String username = claims.getSubject();
