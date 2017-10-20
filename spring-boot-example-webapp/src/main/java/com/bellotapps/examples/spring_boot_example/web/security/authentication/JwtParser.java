@@ -14,5 +14,45 @@ public interface JwtParser {
      * @return The {@link Claims} in the token.
      * @throws IllegalArgumentException If the given {@code jwtToken} is null or if it does not have text.
      */
-    Claims parse(String jwtToken) throws IllegalArgumentException;
+    JwtTokenData parse(String jwtToken) throws IllegalArgumentException;
+
+    /**
+     * Container class wrapping data in a JWT.
+     */
+    class JwtTokenData {
+
+        /**
+         * The user id set in the JWT.
+         */
+        private final long userId;
+        /**
+         * The username set in the JWT.
+         */
+        private final String username;
+
+        /**
+         * Constructor.
+         *
+         * @param userId   The user id set in the JWT.
+         * @param username The username set in the JWT.
+         */
+        /* package */ JwtTokenData(long userId, String username) {
+            this.userId = userId;
+            this.username = username;
+        }
+
+        /**
+         * @return The user id set in the JWT.
+         */
+        public long getUserId() {
+            return userId;
+        }
+
+        /**
+         * @return The username set in the JWT.
+         */
+        public String getUsername() {
+            return username;
+        }
+    }
 }
