@@ -1,6 +1,5 @@
 package com.bellotapps.examples.spring_boot_example.web.controller.rest_endpoints;
 
-import com.bellotapps.examples.spring_boot_example.models.User;
 import com.bellotapps.examples.spring_boot_example.services.AuthenticationService;
 import com.bellotapps.examples.spring_boot_example.web.controller.dtos.authentication.LoginCredentialsDto;
 import com.bellotapps.examples.spring_boot_example.web.support.annotations.JerseyController;
@@ -23,9 +22,14 @@ import javax.ws.rs.core.Response;
 public class SessionEndpoint {
 
     /**
-     * Endpoint for {@link User} management.
+     * Endpoint for session management.
      */
     public static final String SESSIONS_ENDPOINT = "/auth";
+
+    /**
+     * Endpoint for login mechanism.
+     */
+    public static final String LOGIN_ENDPOINT = "/login";
 
     /**
      * The {@link Logger} object.
@@ -44,7 +48,7 @@ public class SessionEndpoint {
 
 
     @POST
-    @Path("/login")
+    @Path(LOGIN_ENDPOINT)
     public Response login(LoginCredentialsDto loginCredentialsDto) {
         LOGGER.debug("Trying to log in user with username {}", loginCredentialsDto.getUsername());
 
