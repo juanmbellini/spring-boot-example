@@ -26,6 +26,18 @@ import javax.ws.rs.core.Response;
         LOGGER.debug("A user was not authenticated. UnauthenticatedException message: {}", exception.getMessage());
         LOGGER.trace("UnauthenticatedException Stack trace: ", exception);
 
+        return unauthenticatedResult();
+    }
+
+    /**
+     * Static method that creates a {@link ErrorHandler.HandlingResult} with <b>401 Unauthorized</b>
+     * response status code, and empty body.
+     * Can be reused by other {@link ExceptionHandler}s that must return the same results.
+     *
+     * @return The {@link ErrorHandler.HandlingResult}.
+     */
+    /* package */
+    static ErrorHandler.HandlingResult unauthenticatedResult() {
         return new ErrorHandler.HandlingResult(Response.Status.UNAUTHORIZED.getStatusCode(), null);
     }
 }

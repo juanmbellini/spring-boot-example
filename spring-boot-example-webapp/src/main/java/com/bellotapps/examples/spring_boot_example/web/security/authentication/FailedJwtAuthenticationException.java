@@ -1,6 +1,7 @@
 package com.bellotapps.examples.spring_boot_example.web.security.authentication;
 
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.util.Assert;
 
 /**
  * {@link AuthenticationException} thrown when there are JWT issues
@@ -28,6 +29,7 @@ import org.springframework.security.core.AuthenticationException;
      */
     /* package */ FailedJwtAuthenticationException(String message, JwtException cause) {
         super(message, cause);
+        Assert.notNull(cause, "The JwtException must not be null");
     }
 
     /**
