@@ -4,9 +4,10 @@ import com.bellotapps.examples.spring_boot_example.exceptions.InvalidCredentials
 import com.bellotapps.examples.spring_boot_example.models.User;
 
 /**
- * Defines behaviour of the service in charge of managing authentication.
+ * Defines behaviour of the service in charge of managing login
+ * (i.e creating {@link com.bellotapps.examples.spring_boot_example.models.Session}s).
  */
-public interface AuthenticationService {
+public interface LoginService {
 
     /**
      * Performs the login process (i.e username and password authentication),
@@ -17,12 +18,12 @@ public interface AuthenticationService {
      * @return A JWT in string representation.
      * @throws InvalidCredentialsException In cae the user does not exists, or if the password is not the correct one.
      */
-    UserAndTokenContainer login(String username, String password) throws InvalidCredentialsException;
+    UserTokenAndJtiContainer login(String username, String password) throws InvalidCredentialsException;
 
     /**
      * Class wrapping a {@link User} and a token (in {@link String} representation) for it.
      */
-    class UserAndTokenContainer {
+    class UserTokenAndJtiContainer {
 
         /**
          * The wrapped user.
@@ -34,14 +35,21 @@ public interface AuthenticationService {
         private final String token;
 
         /**
+         * The JWT id of the token.
+         */
+        private final long jti;
+
+        /**
          * Constructor.
          *
          * @param user  The wrapped user.
          * @param token The token belonging to the {@link User}.
+         * @param jti   The JWT id of the token.
          */
-        /* package */ UserAndTokenContainer(User user, String token) {
+        /* package */ UserTokenAndJtiContainer(User user, String token, long jti) {
             this.user = user;
             this.token = token;
+            this.jti = jti;
         }
 
         /**
@@ -56,6 +64,13 @@ public interface AuthenticationService {
          */
         public String getToken() {
             return token;
+        }
+
+        /**
+         * @return The JWT id of the token.
+         */
+        public long getJti() {
+            return jti;
         }
     }
 }

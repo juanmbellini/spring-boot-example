@@ -34,6 +34,7 @@ public final class JwtAuthenticationProvider implements AuthenticationProvider {
             // We create a new token with the needed data (username, roles, etc.)
             final JwtAuthenticationToken resultToken = new JwtAuthenticationToken();
             resultToken.setPrincipal(tokenData.getUsername());
+            resultToken.setUserId(tokenData.getUserId());
             resultToken.authenticate();
 
             return resultToken;

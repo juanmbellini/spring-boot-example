@@ -23,6 +23,11 @@ import java.util.HashSet;
     private String username;
 
     /**
+     * The {@code id} of the {@link com.bellotapps.examples.spring_boot_example.models.User} that this token belongs to.
+     */
+    private Long userId;
+
+    /**
      * Creates a token with the supplied array of authorities.
      *
      * @param rawToken The raw jwt token.
@@ -30,6 +35,8 @@ import java.util.HashSet;
     /* package */ JwtAuthenticationToken(String rawToken) {
         super(new HashSet<>());
         this.rawToken = rawToken;
+        this.username = null;
+        this.userId = null;
     }
 
     /**
@@ -49,14 +56,6 @@ import java.util.HashSet;
         return (String) getCredentials();
     }
 
-    /**
-     * Sets the principal fot this token.
-     *
-     * @param principal The principal to be set.
-     */
-    /* package */ void setPrincipal(String principal) {
-        this.username = principal;
-    }
 
     /* package */ void authenticate() {
         this.setAuthenticated(true);
@@ -75,11 +74,37 @@ import java.util.HashSet;
         return username;
     }
 
+    /**
+     * @return The {@code id} of the {@link com.bellotapps.examples.spring_boot_example.models.User}
+     * that this token belongs to.
+     */
+    public Long getUserId() {
+        return userId;
+    }
+
     @Override
     public void setAuthenticated(boolean authenticated) {
         if (!authenticated && isAuthenticated()) {
             throw new IllegalStateException("Can't undo authentication");
         }
         super.setAuthenticated(authenticated);
+    }
+
+    /**
+     * Sets the principal for this token.
+     *
+     * @param principal The principal to be set.
+     */
+    /* package */ void setPrincipal(String principal) {
+        this.username = principal;
+    }
+
+    /**
+     * Sets the {@code userId} for this token
+     *
+     * @param userId The {@code userId} to be set.
+     */
+    /* package */ void setUserId(long userId) {
+        this.userId = userId;
     }
 }

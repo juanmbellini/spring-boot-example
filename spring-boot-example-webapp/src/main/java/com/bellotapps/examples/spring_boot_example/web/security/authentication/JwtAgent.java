@@ -1,12 +1,14 @@
 package com.bellotapps.examples.spring_boot_example.web.security.authentication;
 
 import com.bellotapps.examples.spring_boot_example.models.User;
-import com.bellotapps.examples.spring_boot_example.security.TokenGenerator;
+import com.bellotapps.examples.spring_boot_example.security.JwtTokenGenerator;
+import com.bellotapps.examples.spring_boot_example.services.SessionService;
 import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
+import java.security.SecureRandom;
 import java.util.Base64;
 import java.util.Date;
 import java.util.Objects;
@@ -16,9 +18,16 @@ import java.util.Optional;
  * Object in charge of managing JWT operations (generation and validation).
  */
 @Component
-/* package */ class JwtAgent implements TokenGenerator, JwtCompiler {
+/* package */ class JwtAgent implements JwtTokenGenerator, JwtCompiler {
 
     private final static String USER_ID_CLAIM_NAME = "uid";
+
+    private final static String JWT_ID_CLAIM_NAME = "jti";
+
+    /**
+     * {@link SessionService} used to check if a given token is valid.
+     */
+    private final SessionService sessionService;
 
     /**
      * The secret key used to sign the tokens, encoded in base 64.
@@ -38,31 +47,38 @@ import java.util.Optional;
     /**
      * Constructor.
      *
-     * @param secretKey The secret key used to sign the tokens
-     * @param duration  The duration of tokens, in seconds
+     * @param secretKey      The secret key used to sign the tokens
+     * @param duration       The duration of tokens, in seconds
+     * @param sessionService The {@link SessionService} used to create and check validity of a JWT.
      */
     /* package */ JwtAgent(@Value("${custom.security.jwt.signing-key}") String secretKey,
-                    @Value("${custom.security.jwt.duration}") Long duration) {
+                           @Value("${custom.security.jwt.duration}") Long duration,
+                           SessionService sessionService) {
         this.base64EncodedSecretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
         this.duration = duration * 1000;
+        this.sessionService = sessionService;
         this.signatureAlgorithm = SignatureAlgorithm.HS512;
     }
 
     @Override
-    public String generate(User user) {
+    public TokenAndSessionContainer generate(User user) {
         Objects.requireNonNull(user, "The user must not be null");
+        final long jti = new SecureRandom().nextLong();
 
         final Claims claims = Jwts.claims();
         claims.put(USER_ID_CLAIM_NAME, user.getId());
+        claims.put(JWT_ID_CLAIM_NAME, jti);
         claims.setSubject(user.getUsername());
         final Date now = new Date();
 
-        return Jwts.builder()
+        final String token = Jwts.builder()
                 .setClaims(claims)
                 .setIssuedAt(now)
                 .setExpiration(new Date(now.getTime() + duration))
                 .signWith(signatureAlgorithm, base64EncodedSecretKey)
                 .compact();
+
+        return new TokenAndSessionContainer(token, jti);
     }
 
     @Override
@@ -77,15 +93,31 @@ import java.util.Optional;
                     .parse(rawToken, CustomJwtHandlerAdapter.getInstance())
                     .getBody();
 
-            // TODO: check blacklisted
-
             final long userId = (long) claims.get(USER_ID_CLAIM_NAME);  // Previous step validated this value.
+            final long jti = (long) claims.get(JWT_ID_CLAIM_NAME); // Previous step validated this value.
+            checkJwtBlacklist(userId, jti);
             final String username = claims.getSubject();
+
             return new JwtTokenData(userId, username);
         } catch (MalformedJwtException | SignatureException | ExpiredJwtException | UnsupportedJwtException
                 | MissingClaimException e) {
             throw new JwtException("There was a problem with the jwt token", e);
         }
+    }
+
+
+    /**
+     * Validates the JWT identified by the given {@code userId} and {@code jti}
+     *
+     * @param userId The id of the {@link User} that owns the JWT.
+     * @param jti    The JWT id.
+     * @throws JwtException If the JWT is blacklisted.
+     */
+    private void checkJwtBlacklist(long userId, long jti) throws JwtException {
+        if (sessionService.validSession(userId, jti)) {
+            return;
+        }
+        throw new JwtException("Blacklisted JWT");
     }
 
 
@@ -125,6 +157,21 @@ import java.util.Optional;
             if (userIdObject instanceof Integer) {
                 final long userId = ((Integer) userIdObject).longValue();
                 claims.put(USER_ID_CLAIM_NAME, userId);
+            }
+
+            // Check jti is not missing
+            final Object jtiObject = claims.get(JWT_ID_CLAIM_NAME);
+            if (jtiObject == null) {
+                throw new MissingClaimException(header, claims, "Missing \"jwt id\" claim");
+            }
+            // Check user id is an integer (or long) number
+            if (!(jtiObject instanceof Integer) && !(jtiObject instanceof Long)) {
+                throw new MalformedJwtException("The \"jwt id\" claim must be an integer or a long");
+            }
+            // Transform the user id from integer to long
+            if (jtiObject instanceof Integer) {
+                final long jti = ((Integer) jtiObject).longValue();
+                claims.put(JWT_ID_CLAIM_NAME, jti);
             }
 
             // Check issued at date is present and it is not a future date

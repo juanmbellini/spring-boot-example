@@ -1,13 +1,19 @@
 package com.bellotapps.examples.spring_boot_example.persistence;
 
+import com.bellotapps.examples.spring_boot_example.exceptions.InvalidPropertiesException;
 import org.hibernate.criterion.MatchMode;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.persistence.metamodel.EntityType;
-import java.util.Objects;
+import java.lang.reflect.Field;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 /**
  * Class implementing helper methods for the persistence layer.
@@ -44,5 +50,34 @@ import java.util.Objects;
         return caseSensitive ?
                 cb.like(attributePath, matchMode.toMatchString(pattern)) :
                 cb.like(cb.lower(attributePath), matchMode.toMatchString(pattern.toLowerCase()));
+    }
+
+    /**
+     * Validates that the given {@link Pageable} is valid for querying entities of the given {@@code klass}.
+     *
+     * @param pageable The {@link Pageable} to be validated.
+     * @param klass    The class representing the entity.
+     * @param <T>      The concrete type of the entities.
+     * @throws InvalidPropertiesException If it has a {@link org.springframework.data.domain.Sort}
+     *                                    with invalid properties.
+     */
+    static <T> void validatePageable(Pageable pageable, Class<T> klass) throws InvalidPropertiesException {
+        final Sort sort = pageable.getSort();
+        if (sort == null) {
+            return;
+        }
+        final Set<String> properties = Arrays.stream(klass.getDeclaredFields())
+                .map(Field::getName)
+                .collect(Collectors.toSet());
+
+        final List<String> invalidProperties = StreamSupport.stream(Spliterators
+                .spliteratorUnknownSize(sort.iterator(), Spliterator.ORDERED), false)
+                .map(Sort.Order::getProperty)
+                .filter(property -> !properties.contains(property))
+                .collect(Collectors.toList());
+
+        if (!invalidProperties.isEmpty()) {
+            throw new InvalidPropertiesException(invalidProperties);
+        }
     }
 }
