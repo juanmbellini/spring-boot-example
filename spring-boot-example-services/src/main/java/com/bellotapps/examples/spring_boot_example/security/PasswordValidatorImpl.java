@@ -2,7 +2,6 @@ package com.bellotapps.examples.spring_boot_example.security;
 
 import com.bellotapps.examples.spring_boot_example.error_handling.errros.ValidationError;
 import com.bellotapps.examples.spring_boot_example.exceptions.ValidationException;
-import com.bellotapps.examples.spring_boot_example.security.PasswordValidator;
 import org.springframework.stereotype.Component;
 
 import java.util.Collections;
@@ -23,6 +22,6 @@ public class PasswordValidatorImpl implements PasswordValidator {
     }
 
 
-    private static final ValidationError MISSING_PASSWORD =
+    public static final ValidationError MISSING_PASSWORD =
             new ValidationError(ValidationError.ErrorCause.MISSING_VALUE, "password", "The password is missing");
 }
