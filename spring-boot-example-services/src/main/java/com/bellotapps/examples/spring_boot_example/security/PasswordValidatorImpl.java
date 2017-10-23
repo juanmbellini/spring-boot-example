@@ -18,7 +18,7 @@ public class PasswordValidatorImpl implements PasswordValidator {
         if (password == null) {
             throw new ValidationException(Collections.singletonList(MISSING_PASSWORD));
         }
-        // TODO: check password
+        // TODO: check password accordingly
     }
 
 
