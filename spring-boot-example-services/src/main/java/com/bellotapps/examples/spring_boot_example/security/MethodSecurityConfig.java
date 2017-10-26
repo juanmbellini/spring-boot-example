@@ -5,8 +5,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.method.configuration.GlobalMethodSecurityConfiguration;
 
 /**
- * Created by Juan Marcos Bellini on 25/10/17.
- * Questions at jbellini@bellotsapps.com
+ * Configuration class for Global Method Security
  */
 @Configuration
 @EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)

@@ -61,25 +61,30 @@ public class UserServiceImpl implements UserService, UniqueViolationExceptionThr
 
 
     @Override
+    @PreAuthorize("@userPermissionProvider.isAdmin()")
     public Page<User> findMatching(String fullName, LocalDate minBirthDate, LocalDate maxBirthDate,
                                    String username, String email, Pageable pageable) {
         userQueryHelper.validatePageable(pageable);
         final Specification<User> matching = userQueryHelper
                 .createUserSpecification(fullName, minBirthDate, maxBirthDate, username, email);
+
         return userDao.findAll(matching, pageable);
     }
 
     @Override
+    @PreAuthorize("@userPermissionProvider.readById(#id)")
     public Optional<User> getById(long id) {
         return getInitializing(userDao::findById, id);
     }
 
     @Override
+    @PreAuthorize("@userPermissionProvider.readByUsername(#username)")
     public Optional<User> getByUsername(String username) {
         return getInitializing(userDao::findByUsername, username);
     }
 
     @Override
+    @PreAuthorize("@userPermissionProvider.readByEmail(#email)")
     public Optional<User> getByEmail(String email) {
         return getInitializing(userDao::findByEmail, email);
     }
@@ -102,6 +107,7 @@ public class UserServiceImpl implements UserService, UniqueViolationExceptionThr
 
     @Override
     @Transactional
+    @PreAuthorize("@userPermissionProvider.writeById(#id)")
     public void update(long id, String newFullName, LocalDate newBirthDate) {
         final User user = userDao.findById(id).orElseThrow(NoSuchEntityException::new);
         user.update(newFullName, newBirthDate);
@@ -110,6 +116,7 @@ public class UserServiceImpl implements UserService, UniqueViolationExceptionThr
 
     @Override
     @Transactional
+    @PreAuthorize("@userPermissionProvider.writeById(#id)")
     public void changeUsername(long id, String newUsername) {
         final List<UniqueViolationError> errorList = new LinkedList<>();
         checkUsernameUniqueness(newUsername, errorList);
@@ -122,6 +129,7 @@ public class UserServiceImpl implements UserService, UniqueViolationExceptionThr
 
     @Override
     @Transactional
+    @PreAuthorize("@userPermissionProvider.writeById(#id)")
     public void changeEmail(long id, String newEmail) {
         final List<UniqueViolationError> errorList = new LinkedList<>();
         checkEmailUniqueness(newEmail, errorList);
@@ -134,6 +142,7 @@ public class UserServiceImpl implements UserService, UniqueViolationExceptionThr
 
     @Override
     @Transactional
+    @PreAuthorize("@userPermissionProvider.writeById(#id)")
     public void changePassword(long id, String currentPassword, String newPassword) {
         final User user = userDao.findById(id).orElseThrow(NoSuchEntityException::new);
 
@@ -149,13 +158,14 @@ public class UserServiceImpl implements UserService, UniqueViolationExceptionThr
     }
 
     @Override
+    @PreAuthorize("@userPermissionProvider.isAdmin()")
     public Set<Role> getRoles(long id) {
         return getInitializing(userDao::findById, id).map(User::getRoles).orElseThrow(NoSuchEntityException::new);
     }
 
     @Override
     @Transactional
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("@userPermissionProvider.isAdmin()")
     public void addRole(long id, Role role) {
         final User user = userDao.findById(id).orElseThrow(NoSuchEntityException::new);
         user.addRole(role);
@@ -164,7 +174,7 @@ public class UserServiceImpl implements UserService, UniqueViolationExceptionThr
 
     @Override
     @Transactional
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("@userPermissionProvider.isAdmin()")
     public void removeRole(long id, Role role) {
         final User user = userDao.findById(id).orElseThrow(NoSuchEntityException::new);
         user.removeRole(role);
@@ -173,18 +183,21 @@ public class UserServiceImpl implements UserService, UniqueViolationExceptionThr
 
     @Override
     @Transactional
+    @PreAuthorize("@userPermissionProvider.deleteById(#id)")
     public void deleteById(long id) {
         userDao.findById(id).ifPresent(userDao::delete);
     }
 
     @Override
     @Transactional
+    @PreAuthorize("@userPermissionProvider.deleteByUsername(#username)")
     public void deleteByUsername(String username) {
         userDao.findByUsername(username).ifPresent(userDao::delete);
     }
 
     @Override
     @Transactional
+    @PreAuthorize("@userPermissionProvider.deleteByEmail(#email)")
     public void deleteByEmail(String email) {
         userDao.findByEmail(email).ifPresent(userDao::delete);
     }
