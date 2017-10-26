@@ -1,5 +1,10 @@
 package com.bellotapps.examples.spring_boot_example.web.security.authentication;
 
+import com.bellotapps.examples.spring_boot_example.models.Role;
+
+import java.util.Collections;
+import java.util.Set;
+
 /**
  * Defines behaviour for an object than can compile JWT tokens.
  */
@@ -31,14 +36,21 @@ public interface JwtCompiler {
         private final String username;
 
         /**
+         * The user's granted authorities.
+         */
+        private final Set<Role> roles;
+
+        /**
          * Constructor.
          *
          * @param userId   The user id set in the JWT.
          * @param username The username set in the JWT.
+         * @param roles    The user's granted authorities.
          */
-        /* package */ JwtTokenData(long userId, String username) {
+        /* package */ JwtTokenData(long userId, String username, Set<Role> roles) {
             this.userId = userId;
             this.username = username;
+            this.roles = roles;
         }
 
         /**
@@ -53,6 +65,13 @@ public interface JwtCompiler {
          */
         public String getUsername() {
             return username;
+        }
+
+        /**
+         * @return The user's granted authorities.
+         */
+        public Set<Role> getRoles() {
+            return Collections.unmodifiableSet(roles);
         }
     }
 }

@@ -1,18 +1,18 @@
 package com.bellotapps.examples.spring_boot_example.web.security.authentication;
 
+import com.bellotapps.examples.spring_boot_example.models.Role;
 import com.bellotapps.examples.spring_boot_example.models.User;
 import com.bellotapps.examples.spring_boot_example.security.JwtTokenGenerator;
 import com.bellotapps.examples.spring_boot_example.services.SessionService;
 import io.jsonwebtoken.*;
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import java.security.SecureRandom;
-import java.util.Base64;
-import java.util.Date;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Object in charge of managing JWT operations (generation and validation).
@@ -23,6 +23,8 @@ import java.util.Optional;
     private final static String USER_ID_CLAIM_NAME = "uid";
 
     private final static String JWT_ID_CLAIM_NAME = "jti";
+
+    private final static String ROLES_CLAIM_NAME = "roles";
 
     /**
      * {@link SessionService} used to check if a given token is valid.
@@ -63,11 +65,15 @@ import java.util.Optional;
     @Override
     public TokenAndSessionContainer generate(User user) {
         Objects.requireNonNull(user, "The user must not be null");
+        if (!Hibernate.isInitialized(user.getRoles())) {
+            throw new IllegalStateException("The user is not initialized correctly");
+        }
         final long jti = new SecureRandom().nextLong();
 
         final Claims claims = Jwts.claims();
         claims.put(USER_ID_CLAIM_NAME, user.getId());
         claims.put(JWT_ID_CLAIM_NAME, jti);
+        claims.put(ROLES_CLAIM_NAME, user.getRoles());
         claims.setSubject(user.getUsername());
         final Date now = new Date();
 
@@ -93,12 +99,15 @@ import java.util.Optional;
                     .parse(rawToken, CustomJwtHandlerAdapter.getInstance())
                     .getBody();
 
-            final long userId = (long) claims.get(USER_ID_CLAIM_NAME);  // Previous step validated this value.
-            final long jti = (long) claims.get(JWT_ID_CLAIM_NAME); // Previous step validated this value.
+            // Previous step validated the following values
+            final long userId = (long) claims.get(USER_ID_CLAIM_NAME);
+            final long jti = (long) claims.get(JWT_ID_CLAIM_NAME);
+            @SuppressWarnings("unchecked") final Set<Role> roles = (Set<Role>) claims.get(ROLES_CLAIM_NAME);
+
             checkJwtBlacklist(userId, jti);
             final String username = claims.getSubject();
 
-            return new JwtTokenData(userId, username);
+            return new JwtTokenData(userId, username, roles);
         } catch (MalformedJwtException | SignatureException | ExpiredJwtException | UnsupportedJwtException
                 | MissingClaimException e) {
             throw new JwtException("There was a problem with the jwt token", e);
@@ -173,6 +182,19 @@ import java.util.Optional;
                 final long jti = ((Integer) jtiObject).longValue();
                 claims.put(JWT_ID_CLAIM_NAME, jti);
             }
+
+            // Check roles is not missing
+            final Object rolesObject = claims.get(ROLES_CLAIM_NAME);
+            if (rolesObject == null) {
+                throw new MissingClaimException(header, claims, "Missing \"roles\" claim");
+            }
+            // Check roles is a Collection
+            if (!(rolesObject instanceof Collection)) {
+                throw new MalformedJwtException("The \"roles\" claim must be a collection");
+            }
+            // Transform the collection into a Set of Role
+            @SuppressWarnings("unchecked") final Collection<String> rolesCollection = (Collection<String>) rolesObject;
+            claims.put(ROLES_CLAIM_NAME, rolesCollection.stream().map(Role::valueOf).collect(Collectors.toSet()));
 
             // Check issued at date is present and it is not a future date
             final Date issuedAt = Optional.ofNullable(claims.getIssuedAt())

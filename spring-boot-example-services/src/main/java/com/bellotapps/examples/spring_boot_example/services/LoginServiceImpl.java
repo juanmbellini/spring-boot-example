@@ -11,6 +11,7 @@ import com.bellotapps.examples.spring_boot_example.persistence.daos.SessionDao;
 import com.bellotapps.examples.spring_boot_example.persistence.daos.UserDao;
 import com.bellotapps.examples.spring_boot_example.security.JwtTokenGenerator;
 import com.bellotapps.examples.spring_boot_example.security.PasswordValidatorImpl;
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -71,6 +72,7 @@ public class LoginServiceImpl implements LoginService, ValidationExceptionThrowe
         if (!validPassword) {
             throw new InvalidCredentialsException("Password does not match");
         }
+        Hibernate.initialize(user.getRoles());
 
         return createSession(user); // Tries to create the token, retrying if the jti is already in use
     }
