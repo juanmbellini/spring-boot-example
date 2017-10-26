@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -154,6 +155,7 @@ public class UserServiceImpl implements UserService, UniqueViolationExceptionThr
 
     @Override
     @Transactional
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public void addRole(long id, Role role) {
         final User user = userDao.findById(id).orElseThrow(NoSuchEntityException::new);
         user.addRole(role);
@@ -162,6 +164,7 @@ public class UserServiceImpl implements UserService, UniqueViolationExceptionThr
 
     @Override
     @Transactional
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public void removeRole(long id, Role role) {
         final User user = userDao.findById(id).orElseThrow(NoSuchEntityException::new);
         user.removeRole(role);
