@@ -11,11 +11,6 @@ import static com.bellotapps.examples.spring_boot_example.error_handling.errros.
  */
 public class ValidationErrorConstants {
 
-
-    // ==================================
-    // User Validation errors
-    // ==================================
-
     public static final ValidationError MISSING_FULL_NAME = new ValidationError(MISSING_VALUE, "fullName",
             "The fullName is missing.");
     public static final ValidationError FULL_NAME_TOO_SHORT = new ValidationError(ILLEGAL_VALUE, "fullName",
@@ -59,4 +54,10 @@ public class ValidationErrorConstants {
     public static final ValidationError PASSWORD_TOO_LONG = new ValidationError(ILLEGAL_VALUE, "password",
             "The password is too long.");
 
+
+    public static final ValidationError MISSING_USER = new ValidationError(MISSING_VALUE, "user",
+            "The user is missing.");
+
+    public static final ValidationError MISSING_ROLE = new ValidationError(MISSING_VALUE, "role",
+            "The role is missing.");
 }
