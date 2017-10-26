@@ -4,10 +4,12 @@ import com.bellotapps.examples.spring_boot_example.error_handling.errros.UniqueV
 import com.bellotapps.examples.spring_boot_example.error_handling.helpers.UniqueViolationExceptionThrower;
 import com.bellotapps.examples.spring_boot_example.exceptions.NoSuchEntityException;
 import com.bellotapps.examples.spring_boot_example.exceptions.UnauthorizedException;
+import com.bellotapps.examples.spring_boot_example.models.Role;
+import com.bellotapps.examples.spring_boot_example.models.User;
 import com.bellotapps.examples.spring_boot_example.persistence.daos.UserDao;
 import com.bellotapps.examples.spring_boot_example.persistence.query_helpers.UserQueryHelper;
 import com.bellotapps.examples.spring_boot_example.security.PasswordValidator;
-import com.bellotapps.examples.spring_boot_example.models.User;
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,10 +19,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
+import java.util.function.Function;
 
 /**
  * Concrete implementation of {@link UserService}.
@@ -70,17 +70,17 @@ public class UserServiceImpl implements UserService, UniqueViolationExceptionThr
 
     @Override
     public Optional<User> getById(long id) {
-        return userDao.findById(id);
+        return getInitializing(userDao::findById, id);
     }
 
     @Override
     public Optional<User> getByUsername(String username) {
-        return userDao.findByUsername(username);
+        return getInitializing(userDao::findByUsername, username);
     }
 
     @Override
     public Optional<User> getByEmail(String email) {
-        return userDao.findByEmail(email);
+        return getInitializing(userDao::findByEmail, email);
     }
 
 
@@ -148,6 +148,27 @@ public class UserServiceImpl implements UserService, UniqueViolationExceptionThr
     }
 
     @Override
+    public Set<Role> getRoles(long id) {
+        return getInitializing(userDao::findById, id).map(User::getRoles).orElseThrow(NoSuchEntityException::new);
+    }
+
+    @Override
+    @Transactional
+    public void addRole(long id, Role role) {
+        final User user = userDao.findById(id).orElseThrow(NoSuchEntityException::new);
+        user.addRole(role);
+        userDao.save(user);
+    }
+
+    @Override
+    @Transactional
+    public void removeRole(long id, Role role) {
+        final User user = userDao.findById(id).orElseThrow(NoSuchEntityException::new);
+        user.removeRole(role);
+        userDao.save(user);
+    }
+
+    @Override
     @Transactional
     public void deleteById(long id) {
         userDao.findById(id).ifPresent(userDao::delete);
@@ -194,6 +215,24 @@ public class UserServiceImpl implements UserService, UniqueViolationExceptionThr
         if (userDao.existsByUsername(username)) {
             errorList.add(USERNAME_IN_USE);
         }
+    }
+
+    /**
+     * Retrieves a {@link User} {@link Optional} using the given {@code searchFunction}, and the given {@code criteria}.
+     * Will initialize all LAZY relationships of the retrieved {@link User}.
+     * In case no {@link User} was found, the {@link Optional} will be empty.
+     *
+     * @param searchFunction The {@link Function} to be used to search.
+     * @param criteria       The criteria used to find the user (i.e the input for the given {@code searchFunction}.
+     * @param <T>            The specific type of the given {@code criteria}.
+     * @return A nullable {@link Optional} containing the matching {@link User}.
+     */
+    private static <T> Optional<User> getInitializing(Function<T, Optional<User>> searchFunction, T criteria) {
+        final Optional<User> user = searchFunction.apply(criteria);
+        // Initializes LAZY relationships
+        user.map(User::getRoles).ifPresent(Hibernate::initialize);
+
+        return user;
     }
 
     private static final UniqueViolationError USERNAME_IN_USE =
