@@ -54,6 +54,7 @@ import java.util.Optional;
         try {
             chain.doFilter(req, resp);
         } catch (Throwable exception) {
+            LOGGER.debug("An exception was not caught and is being handled by the UncaughtExceptionFilter", exception);
             final HttpServletResponse response = (HttpServletResponse) resp;
             if (response.isCommitted()) {
                 LOGGER.error("Response was committed before handling exception");
