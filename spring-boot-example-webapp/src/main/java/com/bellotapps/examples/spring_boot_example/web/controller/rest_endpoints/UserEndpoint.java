@@ -1,6 +1,7 @@
 package com.bellotapps.examples.spring_boot_example.web.controller.rest_endpoints;
 
 import com.bellotapps.examples.spring_boot_example.error_handling.helpers.ValidationExceptionThrower;
+import com.bellotapps.examples.spring_boot_example.models.Role;
 import com.bellotapps.examples.spring_boot_example.models.User;
 import com.bellotapps.examples.spring_boot_example.services.UserService;
 import com.bellotapps.examples.spring_boot_example.web.controller.dtos.entities.StringValueDto;
@@ -24,8 +25,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
 import java.time.LocalDate;
-import java.util.Collections;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -129,7 +129,7 @@ public class UserEndpoint implements ValidationExceptionThrower {
     }
 
     @PUT
-    @Path("{id: \\d+}")
+    @Path("{id : \\d+}")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response update(@PathParam("id") final long id, final UserDto userDto) {
         if (id <= 0) {
@@ -145,7 +145,7 @@ public class UserEndpoint implements ValidationExceptionThrower {
 
 
     @PUT
-    @Path("{id: \\d+}/username")
+    @Path("{id : \\d+}/username")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response changeUsername(@PathParam("id") final long id, final StringValueDto newUsernameDto) {
         if (id <= 0) {
@@ -160,7 +160,7 @@ public class UserEndpoint implements ValidationExceptionThrower {
     }
 
     @PUT
-    @Path("{id: \\d+}/email")
+    @Path("{id : \\d+}/email")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response changeEmail(@PathParam("id") final long id, final StringValueDto newEmailDto) {
         if (id <= 0) {
@@ -175,7 +175,7 @@ public class UserEndpoint implements ValidationExceptionThrower {
     }
 
     @PUT
-    @Path("{id: \\d+}/password")
+    @Path("{id : \\d+}/password")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response changePassword(@PathParam("id") final long id, final UserDto.PasswordChangeDto passwordChangeDto) {
         if (id <= 0) {
@@ -189,8 +189,36 @@ public class UserEndpoint implements ValidationExceptionThrower {
                 .orElseThrow(MissingJsonException::new);
     }
 
+    @GET
+    @Path("{id : \\d+}/authorities")
+    public Response getAuthorities(@PathParam("id") final long id) {
+        if (id <= 0) {
+            throw new IllegalParamValueException(Collections.singletonList("id"));
+        }
+        final Set<Role> roles = userService.getRoles(id);
+        return Response.ok(roles).build();
+    }
+
+    @PUT
+    @Path("{id : \\d+}/authorities/{role: .+}")
+    public Response addAuthority(@PathParam("id") final long id, @PathParam("role") final Role role) {
+        validateRoleParams(id, role);
+        userService.addRole(id, role);
+
+        return Response.noContent().build();
+    }
+
     @DELETE
-    @Path("{id: \\d+}")
+    @Path("{id : \\d+}/authorities/{role: .+}")
+    public Response removeAuthority(@PathParam("id") final long id, @PathParam("role") final Role role) {
+        validateRoleParams(id, role);
+        userService.removeRole(id, role);
+
+        return Response.noContent().build();
+    }
+
+    @DELETE
+    @Path("{id : \\d+}")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response deleteById(@PathParam("id") final long id) {
         if (id <= 0) {
@@ -249,5 +277,25 @@ public class UserEndpoint implements ValidationExceptionThrower {
                 .path(USERS_ENDPOINT)
                 .path(Long.toString(user.getId()))
                 .build();
+    }
+
+    /**
+     * Performs validation over the given params.
+     *
+     * @param id   The {@link User} id param to be validated.
+     * @param role The {@link Role} param to be validated.
+     * @throws IllegalParamValueException If any of the params is not valid.
+     */
+    private static void validateRoleParams(long id, Role role) throws IllegalParamValueException {
+        final List<String> paramErrors = new LinkedList<>();
+        if (id <= 0) {
+            paramErrors.add("id");
+        }
+        if (role == null) {
+            paramErrors.add("role");
+        }
+        if (!paramErrors.isEmpty()) {
+            throw new IllegalParamValueException(paramErrors);
+        }
     }
 }

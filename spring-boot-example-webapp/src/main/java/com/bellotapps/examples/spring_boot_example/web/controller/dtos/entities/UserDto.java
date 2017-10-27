@@ -1,5 +1,6 @@
 package com.bellotapps.examples.spring_boot_example.web.controller.dtos.entities;
 
+import com.bellotapps.examples.spring_boot_example.models.Role;
 import com.bellotapps.examples.spring_boot_example.models.User;
 import com.bellotapps.examples.spring_boot_example.web.support.data_transfer.json.deserializers.Java8ISOLocalDateDeserializer;
 import com.bellotapps.examples.spring_boot_example.web.support.data_transfer.json.serializers.Java8ISOLocalDateSerializer;
@@ -7,9 +8,11 @@ import com.bellotapps.examples.spring_boot_example.web.support.data_transfer.jso
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import org.hibernate.Hibernate;
 
 import java.net.URI;
 import java.time.LocalDate;
+import java.util.Set;
 
 /**
  * Data transfer object for {@link User} class.
@@ -37,6 +40,12 @@ public class UserDto {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
+
+    @SuppressWarnings("unused")
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private Set<Role> roles;
+
+    @SuppressWarnings("unused")
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @JsonSerialize(using = URISerializer.class)
     private URI locationUrl;
@@ -57,6 +66,7 @@ public class UserDto {
         this.birthDate = user.getBirthDate();
         this.username = user.getUsername();
         this.email = user.getEmail();
+        this.roles = Hibernate.isInitialized(user.getRoles()) ? user.getRoles() : null;
 
         this.locationUrl = locationUrl;
     }

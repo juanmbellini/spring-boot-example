@@ -1,8 +1,8 @@
 package com.bellotapps.examples.spring_boot_example.models;
 
+import com.bellotapps.examples.spring_boot_example.error_handling.errros.ValidationError;
 import com.bellotapps.examples.spring_boot_example.error_handling.helpers.ValidationExceptionThrower;
 import com.bellotapps.examples.spring_boot_example.error_handling.helpers.ValidationHelper;
-import com.bellotapps.examples.spring_boot_example.error_handling.errros.ValidationError;
 import com.bellotapps.examples.spring_boot_example.exceptions.ValidationException;
 import com.bellotapps.examples.spring_boot_example.models.constants.ValidationConstants;
 import com.bellotapps.examples.spring_boot_example.models.constants.ValidationErrorConstants;
@@ -12,7 +12,10 @@ import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import java.util.function.BiConsumer;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Class representing a user of the application.
@@ -63,6 +66,15 @@ public class User implements ValidationExceptionThrower {
     @Column(name = "hashed_password")
     private String hashedPassword;
 
+    /**
+     * The user's authorities.
+     */
+    @ElementCollection(fetch = FetchType.LAZY)
+    @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
+    @Column(name = "role", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private Set<Role> roles;
+
 
     /* package */ User() {
         // For Hibernate.
@@ -84,9 +96,11 @@ public class User implements ValidationExceptionThrower {
         update(fullName, birthDate, errorList);
         changeUsername(username, errorList);
         changeEmail(email, errorList);
-        changePassword(hashedPassword);
 
         throwValidationException(errorList); // Throws ValidationException if values were not valid
+
+        changePassword(hashedPassword);
+        this.roles = Stream.of(Role.ROLE_USER).collect(Collectors.toSet());
     }
 
     /**
@@ -147,6 +161,13 @@ public class User implements ValidationExceptionThrower {
     }
 
     /**
+     * @return The user's authorities.
+     */
+    public Set<Role> getRoles() {
+        return this.roles;
+    }
+
+    /**
      * Changes this user's username.
      *
      * @param username The new username.
@@ -175,6 +196,34 @@ public class User implements ValidationExceptionThrower {
      */
     public void changePassword(String hashedPassword) {
         this.hashedPassword = hashedPassword;
+    }
+
+    /**
+     * Adds the given {@code role} to this user's list of roles.
+     *
+     * @param role The {@link Role} to be added.
+     * @apiNote This is an idempotent operation (i.e adding twice the same role is the same as adding it once).
+     */
+    public void addRole(Role role) {
+        final List<ValidationError> errorList = new LinkedList<>();
+        validateRole(role, errorList);
+        throwValidationException(errorList);
+
+        this.roles.add(role);
+    }
+
+    /**
+     * Removes the given {@code role} to this user's list of roles.
+     *
+     * @param role The {@link Role} to be removed.
+     * @apiNote This is an idempotent operation (i.e removing twice the same role is the same as removing it once).
+     */
+    public void removeRole(Role role) {
+        final List<ValidationError> errorList = new LinkedList<>();
+        validateRole(role, errorList);
+        throwValidationException(errorList);
+
+        this.roles.remove(role);
     }
 
 
@@ -359,5 +408,17 @@ public class User implements ValidationExceptionThrower {
                 ValidationConstants.EMAIL_MAX_LENGTH, errorList, ValidationErrorConstants.MISSING_E_MAIL,
                 ValidationErrorConstants.E_MAIL_TOO_SHORT, ValidationErrorConstants.E_MAIL_TOO_LONG,
                 ValidationErrorConstants.INVALID_E_MAIL);
+    }
+
+    /**
+     * Validates the given {@code role}.
+     * Will add {@link ValidationError}s to the given {@code errorList} if the {@code role} is not valid.
+     *
+     * @param role      The role to be validated.
+     * @param errorList A {@link List} of {@link ValidationError} that might have occurred before executing the method.
+     */
+    private static void validateRole(Role role, List<ValidationError> errorList) {
+        Objects.requireNonNull(errorList, "The error list must not be null!");
+        ValidationHelper.objectNotNull(role, errorList, ValidationErrorConstants.MISSING_ROLE);
     }
 }

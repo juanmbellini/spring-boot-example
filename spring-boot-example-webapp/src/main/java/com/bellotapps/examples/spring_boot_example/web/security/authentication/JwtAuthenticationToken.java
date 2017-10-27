@@ -1,9 +1,13 @@
 package com.bellotapps.examples.spring_boot_example.web.security.authentication;
 
+import com.bellotapps.examples.spring_boot_example.models.Role;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * An {@link Authentication} created with a JWT token.
@@ -42,8 +46,9 @@ import java.util.HashSet;
     /**
      * Default constructor (no credentials are stored).
      */
-    /* package */ JwtAuthenticationToken() {
-        this(null);
+    /* package */ JwtAuthenticationToken(Set<Role> roles) {
+        super(roles.stream().map(Role::toString).map(SimpleGrantedAuthority::new).collect(Collectors.toSet()));
+        this.rawToken = null;
     }
 
 

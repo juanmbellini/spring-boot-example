@@ -1,11 +1,13 @@
 package com.bellotapps.examples.spring_boot_example.services;
 
+import com.bellotapps.examples.spring_boot_example.models.Role;
 import com.bellotapps.examples.spring_boot_example.models.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDate;
 import java.util.Optional;
+import java.util.Set;
 
 /**
  * Defines behaviour of the service in charge of managing {@link User}s.
@@ -100,6 +102,32 @@ public interface UserService {
      * @param newPassword     The new password.
      */
     void changePassword(long id, String currentPassword, String newPassword);
+
+    /**
+     * Retrieves the {@link User}'s with the given {@code id} {@link Role}s.
+     *
+     * @param id The id of the {@link User} whose roles must be returned.
+     * @return The {@link Set} of {@link Role}s of the given {@link User}.
+     */
+    Set<Role> getRoles(long id);
+
+    /**
+     * Adds the given {@link Role} to the {@link User} with th given {@code id}.
+     *
+     * @param id   The id of the {@link User} to which the given {@link Role} must be added.
+     * @param role The {@link Role} to be added.
+     * @apiNote This is an idempotent method.
+     */
+    void addRole(long id, Role role);
+
+    /**
+     * Removes the given {@link Role} to the {@link User} with th given {@code id}.
+     *
+     * @param id   The id of the {@link User} to which the given {@link Role} must be removed.
+     * @param role The {@link Role} to be removed.
+     * @apiNote This is an idempotent method.
+     */
+    void removeRole(long id, Role role);
 
     /**
      * Deletes the {@link User} with the given {@code id}.
