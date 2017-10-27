@@ -10,6 +10,7 @@ import com.bellotapps.examples.spring_boot_example.security.CurrentUserIdProvide
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,8 +33,14 @@ public class SessionServiceImpl implements SessionService {
      */
     private final SessionQueryHelper sessionQueryHelper;
 
+    /**
+     * {@link CurrentUserIdProvider} to know the currenly authenticated user id.
+     */
     private final CurrentUserIdProvider currentUserIdProvider;
 
+    /**
+     * {@link UserDao} to retrieve
+     */
     private final UserDao userDao;
 
     @Autowired
@@ -47,6 +54,7 @@ public class SessionServiceImpl implements SessionService {
 
 
     @Override
+    @PreAuthorize("@userPermissionProvider.readById(#owner.id)")
     public Page<Session> listSessions(User owner, Pageable pageable) {
         sessionQueryHelper.validatePageable(pageable);
         return sessionDao.findByOwner(owner, pageable);
@@ -55,14 +63,13 @@ public class SessionServiceImpl implements SessionService {
 
     @Override
     public boolean validSession(long ownerId, long jti) {
-        return sessionDao.findByOwnerIdAndJti(ownerId, jti).map(Session::isValid)
-                .orElseThrow(NoSuchEntityException::new);
+        return sessionDao.findByOwnerIdAndJti(ownerId, jti).map(Session::isValid).orElse(false);
     }
 
     @Override
     @Transactional
+    @PreAuthorize("@userPermissionProvider.writeById(#ownerId)")
     public void invalidateSession(long ownerId, long jti) {
-        // TODO: perform authorization
         final Session session = sessionDao.findByOwnerIdAndJti(ownerId, jti)
                 .orElseThrow(NoSuchEntityException::new);
         session.blacklist();

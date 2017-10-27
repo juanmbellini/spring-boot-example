@@ -1,7 +1,7 @@
 package com.bellotapps.examples.spring_boot_example.persistence.daos;
 
-import com.bellotapps.examples.spring_boot_example.persistence.custom_repositories.ExtendedJpaRepository;
 import com.bellotapps.examples.spring_boot_example.models.User;
+import com.bellotapps.examples.spring_boot_example.persistence.custom_repositories.ExtendedJpaRepository;
 
 import java.util.Optional;
 

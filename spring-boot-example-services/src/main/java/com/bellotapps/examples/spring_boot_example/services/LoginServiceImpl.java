@@ -29,7 +29,7 @@ import java.util.Objects;
 public class LoginServiceImpl implements LoginService, ValidationExceptionThrower {
 
     /**
-     * Amout of tries to perform the session creation
+     * Amount of tries to perform the session creation
      */
     private static final int MAX_TRIES = 10;
 

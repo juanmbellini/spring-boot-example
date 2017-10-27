@@ -1,6 +1,7 @@
 package com.bellotapps.examples.spring_boot_example.web.security;
 
 import com.bellotapps.examples.spring_boot_example.web.controller.rest_endpoints.SessionEndpoint;
+import com.bellotapps.examples.spring_boot_example.web.controller.rest_endpoints.UserEndpoint;
 import com.bellotapps.examples.spring_boot_example.web.security.authentication.JwtAuthenticationFilter;
 import com.bellotapps.examples.spring_boot_example.web.security.authentication.JwtAuthenticationProvider;
 import com.bellotapps.examples.spring_boot_example.web.security.authentication.TokenAuthenticationFailureHandler;
@@ -19,6 +20,8 @@ import org.springframework.security.web.util.matcher.RequestMatcher;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Spring Security web configuration.
@@ -89,6 +92,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements I
      * for those endpoints where authentication is not mandatory.
      */
     private List<RequestMatcher> optionalAuthenticationMatchers() {
-        return new LinkedList<>();
+        return Stream.of(
+                new AntPathRequestMatcher(jerseyApplicationPath + UserEndpoint.USERS_ENDPOINT, "POST")
+        ).collect(Collectors.toList());
     }
 }
