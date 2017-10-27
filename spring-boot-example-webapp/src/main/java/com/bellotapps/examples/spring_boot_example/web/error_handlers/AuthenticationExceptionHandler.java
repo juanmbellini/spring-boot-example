@@ -12,7 +12,7 @@ import javax.ws.rs.core.Response;
 
 /**
  * {@link ExceptionHandler} in charge of handling {@link UnauthenticatedException}.
- * Will result into a <b>500 Internal Server Error</b> response.
+ * Will result in the return value of {@link UnauthenticatedExceptionHandler#unauthenticatedResult()}.
  */
 @ExceptionHandlerObject
 /* package */ class AuthenticationExceptionHandler implements ExceptionHandler<AuthenticationException> {

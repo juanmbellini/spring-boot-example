@@ -51,7 +51,7 @@ public class SessionEndpoint {
     private final LoginService loginService;
 
     /**
-     * Service in charge of managing sesssions.
+     * Service in charge of managing sessions.
      */
     private final SessionService sessionService;
 
