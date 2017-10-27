@@ -55,8 +55,7 @@ public class SessionServiceImpl implements SessionService {
 
     @Override
     public boolean validSession(long ownerId, long jti) {
-        return sessionDao.findByOwnerIdAndJti(ownerId, jti).map(Session::isValid)
-                .orElseThrow(NoSuchEntityException::new);
+        return sessionDao.findByOwnerIdAndJti(ownerId, jti).map(Session::isValid).orElse(false);
     }
 
     @Override
