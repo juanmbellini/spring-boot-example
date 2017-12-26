@@ -113,7 +113,7 @@ public class LoginServiceImpl implements LoginService, ValidationExceptionThrowe
             validSession = !sessionDao.existsByOwnerAndJti(user, container.getJti());
             tries++;
         }
-        if (tries >= MAX_TRIES) {
+        if (!validSession) {
             throw new RuntimeException("Could not create a session after " + MAX_TRIES + "tries");
         }
 
