@@ -37,7 +37,7 @@ public interface UserPermissionProvider {
      * Tells whether the currently authenticated {@link com.bellotapps.examples.spring_boot_example.models.User}
      * can write the {@link com.bellotapps.examples.spring_boot_example.models.User} with the given {@code id}.
      *
-     * @param id The id of the {@link com.bellotapps.examples.spring_boot_example.models.User} to be writed.
+     * @param id The id of the {@link com.bellotapps.examples.spring_boot_example.models.User} to be written.
      * @return {@code true} if it has permission, or {@code false} otherwise.
      */
     boolean writeById(long id);
