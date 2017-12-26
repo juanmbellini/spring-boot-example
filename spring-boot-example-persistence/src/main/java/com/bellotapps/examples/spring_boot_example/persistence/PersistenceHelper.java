@@ -53,7 +53,7 @@ import java.util.stream.StreamSupport;
     }
 
     /**
-     * Validates that the given {@link Pageable} is valid for querying entities of the given {@@code klass}.
+     * Validates that the given {@link Pageable} is valid for querying entities of the given {@code klass}.
      *
      * @param pageable The {@link Pageable} to be validated.
      * @param klass    The class representing the entity.
