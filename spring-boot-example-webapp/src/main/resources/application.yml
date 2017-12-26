@@ -9,13 +9,6 @@ spring:
             load-on-startup: 1
         type: servlet
 
-    # Mock datasource for booting purposes
-    # Change as needed
-    datasource:
-        url: jdbc:postgresql://localhost:5432/spring-boot-example
-        username: spring-boot
-        password: spring-boot
-
     jpa:
         hibernate:
             ddl-auto: none
@@ -53,6 +46,11 @@ spring:
     profiles:
         - dev
         - development
+
+    datasource:
+        url: jdbc:postgresql://localhost:5432/spring-boot-example
+        username: spring-boot
+        password: spring-boot
 
     jpa:
         properties:
