@@ -5,6 +5,7 @@ import com.bellotapps.examples.spring_boot_example.services.SessionService;
 import com.bellotapps.examples.spring_boot_example.web.controller.dtos.authentication.LoginCredentialsDto;
 import com.bellotapps.examples.spring_boot_example.web.support.annotations.Base64url;
 import com.bellotapps.examples.spring_boot_example.web.support.annotations.JerseyController;
+import com.bellotapps.examples.spring_boot_example.web.support.exceptions.MissingJsonException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,14 +69,14 @@ public class SessionEndpoint {
     @POST
     @Path(LOGIN_ENDPOINT)
     public Response login(LoginCredentialsDto loginCredentialsDto) {
+        if (loginCredentialsDto == null) {
+            throw new MissingJsonException();
+        }
         LOGGER.debug("Trying to log in user with username {}", loginCredentialsDto.getUsername());
-
         // Create a JWT (i.e this creates a "session")
         final LoginService.UserTokenAndJtiContainer container = loginService
                 .login(loginCredentialsDto.getUsername(), loginCredentialsDto.getPassword());
-
         LOGGER.debug("User {} successfully logged in", container.getUser().getUsername());
-
         // Generate url to perform logout of the new generated session
         final String logoutUrl = uriInfo.getBaseUriBuilder()
                 .path(SESSIONS_ENDPOINT)
@@ -84,7 +85,6 @@ public class SessionEndpoint {
                 .path(Base64Utils.encodeToUrlSafeString(Long.toString(container.getJti()).getBytes()))
                 .build()
                 .toString();
-
         return Response.noContent()
                 .header("X-Token", container.getToken())
                 .header("X-Logout-Url", logoutUrl)
@@ -97,7 +97,6 @@ public class SessionEndpoint {
                            @SuppressWarnings("RSReferenceInspection") @PathParam("jti") @Base64url final Long jti) {
         LOGGER.debug("Trying to log out user with id {}", userId);
         sessionService.invalidateSession(userId, jti);
-
         return Response.noContent().build();
     }
 }
