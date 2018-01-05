@@ -95,24 +95,30 @@ public class UserEndpoint implements ValidationExceptionThrower {
     @GET
     @Path("{id : \\d+}")
     public Response getUserById(@PathParam("id") final long id) {
+        if (id <= 0) {
+            throw new IllegalParamValueException(Collections.singletonList("id"));
+        }
         LOGGER.debug("Getting user by id {}", id);
-
         return getUserBySomePropertyResponse(userService.getById(id), uriInfo);
     }
 
     @GET
     @Path("username/{username : .+}")
     public Response getUserByUsername(@PathParam("username") final String username) {
+        if (username == null) {
+            throw new IllegalParamValueException(Collections.singletonList("username"));
+        }
         LOGGER.debug("Getting user by username {}", username);
-
         return getUserBySomePropertyResponse(userService.getByUsername(username), uriInfo);
     }
 
     @GET
     @Path("email/{email : .+}")
     public Response getUserByEmail(@PathParam("email") final String email) {
+        if (email == null) {
+            throw new IllegalParamValueException(Collections.singletonList("email"));
+        }
         LOGGER.debug("Getting user by email {}", email);
-
         return getUserBySomePropertyResponse(userService.getByEmail(email), uriInfo);
     }
 
