@@ -34,7 +34,7 @@ public class SessionServiceImpl implements SessionService {
     private final SessionQueryHelper sessionQueryHelper;
 
     /**
-     * {@link CurrentUserIdProvider} to know the currenly authenticated user id.
+     * {@link CurrentUserIdProvider} to know the currently authenticated user id.
      */
     private final CurrentUserIdProvider currentUserIdProvider;
 
